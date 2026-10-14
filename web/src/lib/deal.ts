@@ -23,6 +23,12 @@ export function payouts(cost: bigint, collateral: bigint, price: bigint, bps: nu
   return { funder, holder: price + collateral - funder };
 }
 
+export function returnedDeposits(cost: bigint, collateral: bigint, principalDeposited: boolean, collateralDeposited: boolean, timeout: boolean) {
+  const funder = principalDeposited ? cost : 0n;
+  const holder = collateralDeposited ? collateral : 0n;
+  return timeout && principalDeposited && collateralDeposited ? { funder: funder + holder, holder: 0n } : { funder, holder };
+}
+
 export function validateCounterparty(value: string, self: string) {
   if (!isAddress(value) || value.toLowerCase() === zeroAddress || value.toLowerCase() === self.toLowerCase()) {
     throw new Error("Enter a different, valid non-zero counterparty address.");

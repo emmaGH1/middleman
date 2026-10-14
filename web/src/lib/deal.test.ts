@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { deadlineLabel, parseUSDC, payouts, validateCounterparty } from "./deal";
+import { deadlineLabel, parseUSDC, payouts, returnedDeposits, validateCounterparty } from "./deal";
 
 test("USDC input is exact at six decimals, never silently rounded", () => {
   assert.equal(parseUSDC("1.000001"), 1000001n);
@@ -26,4 +26,11 @@ test("counterparty must be a different nonzero wallet", () => {
 test("arbitrarily distant onchain deadline cannot crash rendering", () => {
   assert.match(deadlineLabel(1n << 63n), /seconds since Unix epoch/);
   assert.match(deadlineLabel(0n), /1970/);
+});
+test("terminal returns reflect timeout penalties, cancellation and actual deposits", () => {
+  assert.deepEqual(returnedDeposits(100n, 25n, true, true, true), { funder: 125n, holder: 0n });
+  assert.deepEqual(returnedDeposits(100n, 25n, true, true, false), { funder: 100n, holder: 25n });
+  assert.deepEqual(returnedDeposits(100n, 25n, true, false, true), { funder: 100n, holder: 0n });
+  assert.deepEqual(returnedDeposits(100n, 25n, false, true, true), { funder: 0n, holder: 25n });
+  assert.deepEqual(returnedDeposits(100n, 25n, false, false, false), { funder: 0n, holder: 0n });
 });

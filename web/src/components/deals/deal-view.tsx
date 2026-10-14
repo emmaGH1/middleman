@@ -8,7 +8,7 @@ import { chain, escrowAddress, deploymentBlock } from "@/config/contracts";
 import { middlemanAbi, demoPassAbi } from "@/config/abi";
 import { useDeal } from "@/hooks/use-escrow";
 import { useTransaction } from "@/hooks/use-transaction";
-import { deadlineLabel, payouts, statuses, usdc } from "@/lib/deal";
+import { deadlineLabel, payouts, returnedDeposits, statuses, usdc } from "@/lib/deal";
 import { AppFrame, ChainLink, TransactionStatus } from "./shared";
 import { readDealEvents } from "@/lib/events";
 
@@ -40,7 +40,9 @@ export function DealView({ id }: { id: string }) {
   const party = holder || funder;
   const expired = !!d && (query.data?.timestamp ?? 0n) >= d.deliverBy;
   const blocked = !transaction.ready || transaction.pending || query.isError;
-  const split = d ? payouts(d.mintCost, d.collateral, d.salePrice, d.funderBps) : undefined;
+  const split = d ? d.status >= 5
+    ? returnedDeposits(d.mintCost, d.collateral, d.principalDeposited, d.collateralDeposited, d.status === 5)
+    : payouts(d.mintCost, d.collateral, d.salePrice, d.funderBps) : undefined;
   const remaining = d && d.status < 4 ? (d.status < 3 && d.principalDeposited ? d.mintCost : 0n) + (d.collateralDeposited ? d.collateral : 0n) : 0n;
   const action = (fn: string, amount?: bigint) => {
     if (!escrowAddress) return;
@@ -66,7 +68,7 @@ export function DealView({ id }: { id: string }) {
         <div><dt>Fixed sale price</dt><dd>{usdc(d.salePrice)} USDC</dd></div>
         <div><dt>USDC reserved for this deal</dt><dd>{usdc(remaining)} USDC</dd></div>
       </dl><p className="action-help">Reserved USDC is derived from this deal’s onchain state, not the total pooled contract balance.</p>
-      {split && <div className="settlement"><span className="mono">{d.status === 4 ? "SETTLED PAYOUTS" : "PAYOUTS IF SOLD AT AGREED PRICE"}</span><div><span>FUNDER</span><strong>{usdc(split.funder)} <small>USDC</small></strong></div><div><span>HOLDER</span><strong>{usdc(split.holder)} <small>USDC</small></strong></div><p>Holder amount includes remaining collateral. No platform fee.</p></div>}
+      {split && <div className="settlement"><span className="mono">{d.status === 5 ? "REFUNDED PAYOUTS" : d.status === 6 ? "RETURNED DEPOSITS" : d.status === 4 ? "SETTLED PAYOUTS" : "PAYOUTS IF SOLD AT AGREED PRICE"}</span><div><span>FUNDER</span><strong>{usdc(split.funder)} <small>USDC</small></strong></div><div><span>HOLDER</span><strong>{usdc(split.holder)} <small>USDC</small></strong></div><p>{d.status >= 5 ? "No sale occurred. These amounts were returned under the agreement’s refund or cancellation rules." : "Holder amount includes remaining collateral. No platform fee."}</p></div>}
       </section><aside><span className="mono">02 / YOUR NEXT MOVE</span><h2>{d.status === 4 ? "Settled. In code." : d.status === 3 ? "The NFT is locked." : "Every step, agreed."}</h2>
         {!address && <p>Connect a wallet to see its available actions.</p>}
         {d.status === 0 && <p>The counterparty must accept before either wallet deposits.</p>}

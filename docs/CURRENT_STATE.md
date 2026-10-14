@@ -57,6 +57,12 @@ The app remains fail-closed when deployment configuration is absent: source conf
 - Independent security review, Arc testnet/mainnet deployment, real-wallet or public-chain validation, Vercel deployment.
 - Real demo, submission text, grant rule verification.
 
+## Immediate continuation gate — testnet faucet
+
+Fresh testnet-only wallets were generated; a secure personal secret-save prompt for `MIDDLEMAN_TESTNET_WALLETS` was offered. Do not create replacement keys for funded addresses. Ensure that secret is saved before resuming in a new session. No wallet keys are in the repo or web environment.
+
+The official Circle faucet requested a human CAPTCHA; deployer balance was0 at the last RPC check. Fund this Arc **testnet-only** deployer through https://faucet.circle.com: `0xE1a98416C5c1fECE3931241B2F6E62F91515bD26`. The fresh holder/funder/buyer addresses are in the secret bundle. After funding, distribute test USDC with gas headroom, execute the documented testnet deployment/flow, and record public receipts. No public contract deployment has happened. Mainnet still requires a separate explicit human approval and real-funds budget.
+
 ## Dependency limitation
 `npm audit --json` reports 29 vulnerabilities (23 moderate, 6 high, 0 critical). The high-severity entries include `braces` advisory GHSA-vfj7-8cjw-p6xm in the ESLint dependency chain and two `ws` advisories, GHSA-58qx-3vcg-4xpx and GHSA-96hv-2xvq-fx4p. npm's suggested remediations include downgrading `eslint-config-next` to 14.2.35 or migrating wagmi to v3; neither was applied because they conflict with the requested Next.js/wagmi versions. No force fix or security bypass was used. Review the upstream fixes before expanding deployment scope.
 

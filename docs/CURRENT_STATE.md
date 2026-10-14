@@ -8,11 +8,31 @@
 - Lint, TypeScript and production build pass on Next.js 16.4.1.
 - Visually reviewed landing and deal probe in rendered Chrome at 1440×900 and 390×844. CTA routes to the labelled probe. Screenshots saved in `docs/screens/`.
 
-## Needs a decision
-The brief promises the funder mint principal plus collateral after non-delivery, but also allows the holder to withdraw principal before minting. With 100 USDC principal and 25 USDC collateral, only 25 remains recoverable after withdrawal. A contract cannot return funds it no longer holds. Money-moving implementation is paused pending a choice: retain the specified collateral-only refund with explicit risk, or change the mint architecture to protect principal. No choice has been made for the user.
+## Contracts — local verification complete
+The approved model is DemoPass-only atomic minting. There is no holder withdrawal or guaranteed resale liquidity; payment and NFT custody succeed in one transaction, and a successful mint does not guarantee a buyer or cash recovery. Fully funded non-delivery refunds principal and collateral to the funder; incomplete funding returns each actual deposit. Sale terms must be covered by price plus collateral. See `SECURITY.md` for cancellation, timeout, whitelist and liquidity limits.
+
+- `forge build --sizes` compiled contracts, tests and deployment scripts with Solidity 0.8.24; `MiddlemanTest` passed 16/16, including 1,000 payout fuzz runs.
+- Both Makefile mainnet targets fail without `MAINNET_APPROVED=true`. No broadcast or deployment was performed.
+- Local tests are not an independent audit or evidence of Arc precompile behavior.
+
+## Contract setup and verification
+From the repository root:
+
+```sh
+curl -L https://getfoundry.sh/install | bash
+export PATH="$PATH:$HOME/.foundry/bin"
+foundryup --install 1.8.5
+cd contracts
+forge install --root "$PWD" OpenZeppelin/openzeppelin-contracts@v5.0.2 foundry-rs/forge-std@v1.9.7
+forge fmt
+forge build --sizes
+forge test --match-contract MiddlemanTest -vv
+```
+
+`MiddlemanTest` is currently the only test contract, so this filtered command covers the full contract test suite.
 
 ## Not done
-- Contracts, test suite, chain-connected routes, testnet/mainnet deployments, Vercel deployment.
+- Independent security review, Arc testnet/mainnet deployments, chain-connected routes, Vercel deployment.
 - Real demo, submission text, grant rule verification.
 
 ## Dependency limitation

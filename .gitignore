@@ -8,3 +8,4 @@ cache/
 *.tsbuildinfo
 playwright-report/
 test-results/
+broadcast/

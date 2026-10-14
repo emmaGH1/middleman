@@ -6,8 +6,8 @@
 - Implemented the Next.js app with landing, deal list/create/detail, mint, and explicitly labelled visual-probe routes.
 - Installed actual shadcn/ui Button with Radix Slot, Tailwind 4, and locally packaged Inter Tight / IBM Plex Mono fonts.
 - Shell lint, TypeScript, tests, ABI check, and production build pass on Next.js 16.4.1; details below.
-- Landing and deal-probe visual review was completed in a prior handoff in rendered Chrome at 1440×900 and 390×844. CTA routes to the labelled probe. Screenshots saved in `docs/screens/`.
-- Lead-reviewed local browser testing completed two clean sale runs plus a recorded third against local Anvil with test USDC. It found a refunded/cancelled terminal-amount display defect, now corrected and covered by a pure unit test; visual retest of that display remains pending. These runs are not real-wallet or public Arc proof. No services were started, stopped, or reconfigured in this handoff.
+- Landing and deal-probe visual review was completed in rendered Chrome at 1440×900 and 390×844. The landing CTA now opens real agreement creation, not the historical visual probe.
+- Local production-browser testing completed two clean sale runs plus a recorded third against local Anvil with test USDC. It found a terminal-amount display defect, corrected at `0e3ccc6` and visually retested after a production rebuild: refund125/0, mutual cancellation100/25, partial cancellation100/0, and sold regression220/105 all match onchain results. Terminal reserves show0; desktop1440/mobile390 views have no clipped payouts or horizontal overflow. These runs are not real-wallet or public Arc proof.
 
 ## Contracts — local verification complete
 The approved model is DemoPass-only atomic minting. There is no holder withdrawal or guaranteed resale liquidity; payment and NFT custody succeed in one transaction, and a successful mint does not guarantee a buyer or cash recovery. Fully funded non-delivery refunds principal and collateral to the funder; incomplete funding returns each actual deposit. Sale terms must be covered by price plus collateral. See `SECURITY.md` for cancellation, timeout, whitelist and liquidity limits.
@@ -49,12 +49,12 @@ npm run typecheck
 npm run build
 ```
 
-At that baseline, `test` passed 4/4 deal tests; `check:abi` confirmed the frontend ABIs match the compiled Middleman and DemoPass artifacts, including named return tuples. The production build generated `/`, `/deals`, `/deals/new`, `/deals/probe`, and `/mint` as static routes, and `/deals/[id]` as a dynamic server-rendered route. For the terminal-display follow-up, `npm run test` passed 5/5 tests, including returned-deposit amounts for timeout, cancellation and partial deposits; `npm run lint` and `npm run typecheck` passed. The ABI check and production build were intentionally not rerun. The lead-reported local browser sale runs are documented above; visual retest of the display fix is pending.
+At that baseline, `test` passed4/4 deal tests; `check:abi` confirmed the frontend ABIs match the compiled Middleman and DemoPass artifacts, including named return tuples. The production build generated `/`, `/deals`, `/deals/new`, `/deals/probe`, and `/mint` as static routes, and `/deals/[id]` as a dynamic server-rendered route. For the terminal-display follow-up, `npm run test` passed5/5 tests, including returned-deposit amounts for timeout, cancellation and partial deposits; lint and typecheck passed. Production was rebuilt for the focused browser retest, which passed. The unchanged ABI check was not rerun.
 
 The app remains fail-closed when deployment configuration is absent: source configuration requires the escrow address and deployment block, and transaction readiness also requires a connected wallet on the configured chain and a verified deployment.
 
 ## Not done
-- Independent security review, Arc testnet deployment, real-wallet or public-chain validation, visual retest of the terminal-display fix, Vercel deployment.
+- Independent security review, Arc testnet/mainnet deployment, real-wallet or public-chain validation, Vercel deployment.
 - Real demo, submission text, grant rule verification.
 
 ## Dependency limitation

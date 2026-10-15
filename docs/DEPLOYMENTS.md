@@ -51,4 +51,22 @@ The `Sold` event and `salePayout(1)` both report `2200000 / 1050000`. Native bal
 
 [Machine-readable public evidence](DEPLOYMENTS.json) contains funding receipts, all flow receipts, pinned balance snapshots, gas calculations and final assertions. It contains no keys.
 
-This proves one scripted happy-path execution on public Arc testnet, not a browser-wallet test, mainnet run, audit, refund-path test on Arc, or guarantee of future execution. Local failure/refund/cancellation tests are documented separately in `CURRENT_STATE.md`. The holder has already minted; do not replay this flow with the same holder. Mainnet, Vercel and the live browser demo remain gated/pending.
+The original JSON proves one scripted happy-path execution on public Arc testnet. The browser-wallet run below is separate evidence, not a mainnet run, audit, refund-path test on Arc, or guarantee of future execution. Local failure/refund/cancellation tests are documented separately in `CURRENT_STATE.md`. The original holder has already minted; do not replay this flow with that holder. Mainnet, Vercel and the final submission demo remain gated/pending.
+
+## Browser-wallet deal 2
+
+The application at revision `615186b` completed a second sale on the same public testnet deployment using the **Rabby browser extension**, with automated UI confirmations (not injected private-key signing or human confirmations). The holder was rotated to `0x17802B6ccc41d22F8BdF6F930761604CcF16Ae87`, funder to `0x2BBbC332e6cFD4088B716e78734c91aDaeD2ABDc`, and buyer to `0x9386A1e40F2e701F5B9cc296450CA43613031b9E`. The owner stayed unchanged. No new deployment was needed.
+
+| Action | Public testnet receipt |
+| --- | --- |
+| Owner allowlists fresh holder (setup only) | [Receipt](https://explorer.testnet.arc.io/tx/0xa1be9f3cf96659b1c99ee40aa3660b02c0d02acabeb2381f8c8966d9233f31de) |
+| Propose through app | [Receipt](https://explorer.testnet.arc.io/tx/0x22aefcaae1361019e59cb5f40a1f2b872975a4a89b2fa191c736936348b3c8db) |
+| Accept | [Receipt](https://explorer.testnet.arc.io/tx/0xf1196b335a8ff1dc307c73e31839621cfe68db35f862298dde11d30ff6f3616b) |
+| Fund 1 test USDC | [Receipt](https://explorer.testnet.arc.io/tx/0xd79172240d8a89fd2d1303770449044c5eccf6e8cd9d4bc56402a89abf029157) |
+| Post 0.25 collateral | [Receipt](https://explorer.testnet.arc.io/tx/0x06cbe5c2a7f73ffe7190224b28c93dca1ed52a6a468255b311edc42faf74c7d5) |
+| Atomic mint | [Receipt](https://explorer.testnet.arc.io/tx/0x9be46102b24c329657cf32d38b1b5e98f889cbc609b7cd837a85d37517e16074) |
+| Buy for 3 test USDC | [Receipt](https://explorer.testnet.arc.io/tx/0x702548496f0668b165de00ef396c79659de358af0aa07cbd4affda168a2591bd) |
+
+The app displayed `Sold`, gross sale payouts of 2.20/1.05 test USDC and zero reserves. NFT 2 reached the buyer; the sale receipt matched those payouts and escrow's USDC balance was zero. Minting paid the treasury 1 test USDC and put NFT 2 in escrow without paying mint principal to the holder. Role-restricted controls, receipt links and the prior deal 1 display passed browser checks. Separate missing/combined-invalid configuration screens disabled transaction buttons.
+
+**Limits:** Rabby displayed “Simulation Not Supported / Unknown Signature Type” for custom-network contract calls. Chain, signer, destination and decoded calldata were checked before each signature. Helper-label/raw-preview timing corrections interrupted the procedure, but produced no duplicate or failed deal transactions. This is not the final uninterrupted submission demo. Other browser wallets, individual invalid-config permutations, public-chain refund/failure cases, mainnet and Vercel remain untested. Both holders used for deals 1 and 2 have consumed their one eligible mint.

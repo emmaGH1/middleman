@@ -51,4 +51,4 @@ Contract setup and exact verification commands are in [current state](docs/CURRE
 
 ## Release blockers
 
-No mainnet or Vercel deployment exists yet. The public-chain flow was executed by scripts, not browser-wallet confirmations. Dependency audit findings remain in the wallet/ESLint trees (see current state); there is no independent contract audit. Resolve/review these before considering real funds. Mainnet requires separate human approval and credentials; testnet receipts do not satisfy a mainnet-only submission requirement.
+No mainnet or Vercel deployment exists yet. In addition to the scripted flow, a second testnet deal passed through the app using automated confirmations in the real Rabby extension; see deployment evidence for its unsupported-simulation warning and recording limits. Dependency audit findings remain in the wallet/ESLint trees (see current state); there is no independent contract audit. Resolve/review these before considering real funds. Mainnet requires separate human approval and credentials; testnet receipts do not satisfy a mainnet-only submission requirement.

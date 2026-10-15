@@ -57,13 +57,13 @@ For the dependency follow-up, `npm install --package-lock-only` regenerated the 
 
 The configured production build also passed with the verified testnet public settings: chain `5042002`, escrow `0x15C72Ed9a299c69eB1F216ce56710498Cc5Ff8e7`, deployment block `67275471`, local-chain flag `0`, and demo-connector flag `0`. The build environment was isolated to these public values and required host paths; no secret environment variables were bound. This does not validate browser-wallet behavior or deploy the frontend.
 
-For the hardening follow-up, the subprocess config suite passed 3/3 while importing the actual config module. It covers the explicit Arc network allowlist, exact local opt-in and local USDC requirement, and invalid address/block fail-closed behavior. The expanded `npm run test` then passed 8/8; `npm run check:abi`, `npm run lint`, `npm run typecheck`, and the configured production build also passed. The 27 dependency findings (22 moderate, 5 high, 0 critical) remain unresolved as documented in `DEPENDENCIES.md`.
+For the hardening follow-up, the subprocess config suite passed 3/3 while importing the actual config module. It covers the explicit Arc network allowlist, exact local opt-in and local USDC requirement, and invalid address/block fail-closed behavior. The expanded `npm run test` then passed 8/8; `npm run check:abi`, `npm run lint`, `npm run typecheck`, and the configured production build also passed. That historical audit snapshot was 27 findings (22 moderate, 5 high, 0 critical), as documented in `DEPENDENCIES.md`.
 
 The app remains fail-closed when deployment configuration is absent: source configuration requires the escrow address and deployment block, and transaction readiness also requires a connected wallet on the configured chain and a verified deployment.
 
 ## Not done
-- Independent security review, Arc mainnet deployment, public-chain browser-wallet validation, Vercel deployment.
-- Live-network two-clean-run demo and final recording. Public testnet verification so far is one scripted sale; refund/cancellation and failure-path evidence remain local.
+- Independent security review, Arc mainnet deployment, Vercel deployment, other browser wallets and remote/mobile SDK pairing.
+- Live-network two-clean-run demo and final recording. Public testnet verification includes one scripted sale and one Rabby/UI sale; refund/cancellation and failure-path evidence remain local.
 - Mainnet-only grant requirements are not satisfied by these testnet receipts. No acceptance or submission-update claim is made.
 
 ## Immediate continuation gate — mainnet approval
@@ -74,12 +74,22 @@ Do not fund the old address `0xE1a98416C5c1fECE3931241B2F6E62F91515bD26`; its ke
 
 `web/.env.example` now contains the verified testnet address and deployment block. Copy it to `.env.local` for a local testnet frontend; missing configuration still disables writes. No public frontend deployment or mainnet label has been enabled.
 
+## Public-testnet browser verification
+
+At `615186b`, the real Rabby extension completed deal 2 through the application on Arc testnet using automated UI confirmations, not an injected signer. The owner first allowlisted the rotated holder through one explicitly authorized setup transaction; all deal actions used the UI. Proposal, acceptance, funding, collateral, atomic mint and sale passed, along with role-restricted controls, explorer receipts, prior sold deal 1 and disabled missing/combined-invalid configuration. See `DEPLOYMENTS.md` for public hashes and amounts. Both prior holders have consumed their one eligible mint.
+
+Rabby reported unsupported custom-network simulation/unknown signature type. Each chain, signer, destination and decoded calldata was checked before approval. Test-helper timing/label corrections interrupted the procedure without duplicate or failed deal transactions; this is not an uninterrupted final submission demo. The extension session contained only testnet burner credentials, not mainnet keys. Dependency changes after that revision require a separately identified retest.
+
 ## Dependency limitation
 Emma chose continued testnet hardening rather than mainnet approval. See [dependency risk review](DEPENDENCIES.md) for the remaining dependency paths, compatibility constraints and connector exposure limits. No mainnet credentials or broadcast are authorized.
 
 The authored override in `web/package.json` is `"ws@^8.0.0": "8.21.0"`. It consolidates the nested viem/WalletConnect `ws` 8.x branches onto `8.21.0`, matching direct viem `2.57.7`; WalletConnect's `@walletconnect/jsonrpc` `ws@7.5.13` branch remains unchanged. `npm ls ws` verified the override and the unchanged 7.x branch.
 
-After `npm install --package-lock-only` and `npm ci`, `npm audit --json` reports 27 vulnerabilities (22 moderate, 5 high, 0 critical). Remaining advisories are `GHSA-vcc3-ghjq-m6fr` (`decode-uri-component` denial of service), `GHSA-vfj7-8cjw-p6xm` (`braces` stack-exhaustion denial of service), and `GHSA-w5hq-g745-h8pq` (`uuid` missing buffer bounds check). No `npm audit fix`, force fix, major migration, or unrelated upgrade was used. Review upstream fixes before expanding deployment scope.
+UUID remediation was attempted but not accepted. With the parent-scoped overrides, `npm update uuid --package-lock-only`, `npm ci`, the focused dependency test and `npm ls uuid --all` still showed `uuid@9.0.1` under MetaMask utility packages. The authorized range-scoped `uuid@^8.0.0` / `uuid@^9.0.0` fallback also left those copies; the focused guard was 1 passed / 1 failed, and `npm ls` returned `ELSPROBLEMS`. The candidate overrides, dependency test, test-script addition and lockfile edits were then reverted. A clean `npm ci` restored the pre-experiment dependency graph.
+
+The rejected candidate audit snapshot was 24 vulnerabilities (19 moderate, 5 high, 0 critical), but it still contained vulnerable UUID copies. After rollback, the current `npm audit --json` is **27 vulnerabilities (22 moderate, 5 high, 0 critical)**: `GHSA-vcc3-ghjq-m6fr` (`decode-uri-component` denial of service), `GHSA-vfj7-8cjw-p6xm` (`braces` stack-exhaustion denial of service), and `GHSA-w5hq-g745-h8pq` (`uuid` missing buffer bounds check). `npm run test` after rollback passed 8/8. The ABI check, lint, typecheck and configured build were not rerun in this failure branch; no external security audit was performed.
+
+The public Rabby browser verification at `615186b` predates this dependency-remediation attempt. No browser or chain interaction was performed during this work; the read-only post-change testnet retest remains pending. Remote/mobile MetaMask SDK pairing remains untested and unregistered.
 
 ## Next steps
 Deployment gates are:

@@ -42,4 +42,4 @@ Contract setup and exact verification commands are in [current state](docs/CURRE
 
 ## Release blockers
 
-No Arc testnet/mainnet or Vercel deployment exists yet. Local Anvil does not reproduce native-USDC gas behavior or validate real wallet confirmations. Dependency audit findings remain in the wallet/ESLint trees (see current state); there is no independent contract audit. Resolve/review these before considering real funds. No hackathon submission has been made.
+No Arc testnet/mainnet or Vercel deployment exists yet. Local Anvil does not reproduce native-USDC gas behavior or validate real wallet confirmations. Dependency audit findings remain in the wallet/ESLint trees (see current state); there is no independent contract audit. Resolve/review these before considering real funds. Public deployment proof remains unavailable; no Arc testnet/mainnet receipts have been recorded.

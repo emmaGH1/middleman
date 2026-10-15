@@ -49,7 +49,9 @@ npm run typecheck
 npm run build
 ```
 
-At that baseline, `test` passed4/4 deal tests; `check:abi` confirmed the frontend ABIs match the compiled Middleman and DemoPass artifacts, including named return tuples. The production build generated `/`, `/deals`, `/deals/new`, `/deals/probe`, and `/mint` as static routes, and `/deals/[id]` as a dynamic server-rendered route. For the terminal-display follow-up, `npm run test` passed5/5 tests, including returned-deposit amounts for timeout, cancellation and partial deposits; lint and typecheck passed. Production was rebuilt for the focused browser retest, which passed. The unchanged ABI check was not rerun.
+At that baseline, `test` passed4/4 deal tests; `check:abi` confirmed the frontend ABIs match the compiled Middleman and DemoPass artifacts, including named return tuples. The production build generated `/`, `/deals`, `/deals/new`, `/deals/probe`, and `/mint` as static routes, and `/deals/[id]` as a dynamic server-rendered route. For the terminal-display follow-up, `npm run test` passed5/5 tests, including returned-deposit amounts for timeout, cancellation and partial deposits; lint and typecheck passed. Production was rebuilt for the focused browser retest, which passed.
+
+For the dependency follow-up, `npm install --package-lock-only` regenerated the lockfile and `npm ci` completed. The required commands then passed in order: `npm run test` (5/5), `npm run check:abi`, `npm run lint`, `npm run typecheck`, and `npm run build`. These are shell/build checks, not real-wallet or public-chain validation.
 
 The app remains fail-closed when deployment configuration is absent: source configuration requires the escrow address and deployment block, and transaction readiness also requires a connected wallet on the configured chain and a verified deployment.
 
@@ -59,14 +61,20 @@ The app remains fail-closed when deployment configuration is absent: source conf
 
 ## Immediate continuation gate — testnet faucet
 
-Fresh testnet-only wallets were generated; a secure personal secret-save prompt for `MIDDLEMAN_TESTNET_WALLETS` was offered. Do not create replacement keys for funded addresses. Ensure that secret is saved before resuming in a new session. No wallet keys are in the repo or web environment.
+The previously generated testnet wallet bundle is not available: `MIDDLEMAN_TESTNET_WALLETS` is absent from the saved secrets and current process environment. Bounded filename-only searches of likely local storage directories and exact Keychain service checks found no surviving bundle. No key material was read or logged, no replacement wallets were generated, and no broadcast occurred.
 
-The official Circle faucet requested a human CAPTCHA; deployer balance was0 at the last RPC check. Fund this Arc **testnet-only** deployer through https://faucet.circle.com: `0xE1a98416C5c1fECE3931241B2F6E62F91515bD26`. The fresh holder/funder/buyer addresses are in the secret bundle. After funding, distribute test USDC with gas headroom, execute the documented testnet deployment/flow, and record public receipts. No public contract deployment has happened. Mainnet still requires a separate explicit human approval and real-funds budget.
+The user-confirmed Arc testnet address `0xE1a98416C5c1fECE3931241B2F6E62F91515bD26` has a zero balance. Do not fund or use that address until its corresponding private key is accessible; the holder/funder/buyer addresses cannot be treated as available from an inaccessible secret bundle. After key access is established, follow `docs/DEPLOYMENT.md` for a testnet-first deployment/flow and record public receipts. No public contract deployment has happened. Mainnet still requires separate human approval and a real-funds budget.
 
 ## Dependency limitation
-`npm audit --json` reports 29 vulnerabilities (23 moderate, 6 high, 0 critical). The high-severity entries include `braces` advisory GHSA-vfj7-8cjw-p6xm in the ESLint dependency chain and two `ws` advisories, GHSA-58qx-3vcg-4xpx and GHSA-96hv-2xvq-fx4p. npm's suggested remediations include downgrading `eslint-config-next` to 14.2.35 or migrating wagmi to v3; neither was applied because they conflict with the requested Next.js/wagmi versions. No force fix or security bypass was used. Review the upstream fixes before expanding deployment scope.
+The authored override in `web/package.json` is `"ws@^8.0.0": "8.21.0"`. It consolidates the nested viem/WalletConnect `ws` 8.x branches onto `8.21.0`, matching direct viem `2.57.7`; WalletConnect's `@walletconnect/jsonrpc` `ws@7.5.13` branch remains unchanged. `npm ls ws` verified the override and the unchanged 7.x branch.
+
+After `npm install --package-lock-only` and `npm ci`, `npm audit --json` reports 27 vulnerabilities (22 moderate, 5 high, 0 critical). Remaining advisories are `GHSA-vcc3-ghjq-m6fr` (`decode-uri-component` denial of service), `GHSA-vfj7-8cjw-p6xm` (`braces` stack-exhaustion denial of service), and `GHSA-w5hq-g745-h8pq` (`uuid` missing buffer bounds check). No `npm audit fix`, force fix, major migration, or unrelated upgrade was used. Review upstream fixes before expanding deployment scope.
 
 ## Next steps
-The focused visual retest of the refunded/cancelled terminal display is pending in the testing-owned local setup. Follow `docs/DEPLOYMENT.md` for testnet-first deployment; the local browser runs and Arc Foundry test do not establish public-chain or real-wallet behavior.
+Deployment gates are:
 
-No private keys are required for shell checks; with absent deployment configuration transaction readiness remains disabled. Existing Anvil/Next services owned by the testing setup were left untouched. Never display a live deployment label without a verified address.
+1. Establish access to the intended testnet-only deployer, holder, funder, and buyer private keys and verify their public addresses. Never fund an address whose corresponding key is unavailable.
+2. After key access is confirmed, fund only the Arc testnet deployer, execute the documented testnet deployment/flow, and record public receipts. Local browser runs and Arc Foundry tests do not establish public-chain or real-wallet behavior.
+3. Consider mainnet only after testnet evidence, a separate explicit human approval, and a real-funds budget. No mainnet broadcast is authorized by local checks alone.
+
+No private keys are required for shell checks; with absent deployment configuration transaction readiness remains disabled. Never display a live deployment label without a verified address.

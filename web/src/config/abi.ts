@@ -22,6 +22,7 @@ export const middlemanAbi = parseAbi([
 ]);
 
 export const demoPassAbi = parseAbi([
+  "function owner() view returns (address)",
   "function escrow() view returns (address)", "function usdc() view returns (address)",
   "function mintPrice() view returns (uint256)", "function allowlisted(address) view returns (bool)",
   "function minted(address) view returns (bool)", "function ownerOf(uint256) view returns (address)",

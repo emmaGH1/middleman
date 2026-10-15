@@ -71,9 +71,10 @@ export function NewDeal() {
         {preview && deployment.data ? <p className="terms-preview">The funder puts in <strong>{usdc(deployment.data.mintCost)} USDC</strong>. The holder puts in <strong>{collateral} USDC</strong> collateral. On a sale at <strong>{price} USDC</strong>, the funder receives <strong>{usdc(preview.funder)} USDC</strong> and the holder receives <strong>{usdc(preview.holder)} USDC</strong>, including remaining collateral.</p> : <p>Enter the terms to calculate the exact split. These are proposed amounts, not live balances.</p>}
         {termsError && <p className="error" role="alert">{termsError}</p>}
         <div className="mint-rule mono">[ USDC ] → [ MINT + NFT CUSTODY ]<br />ONE TRANSACTION. OR NONE.</div>
-        <label className="risk-checkbox"><input type="checkbox" checked={acknowledged} onChange={e => setAcknowledged(e.target.checked)} required /> <span>I understand that after minting there is no deadline refund, guaranteed buyer, or price change. Principal and collateral may remain locked indefinitely. Each holder can mint only once.</span></label>
+        <p className="action-help">Buyer cost is the fixed sale price plus network gas. Platform fee: 0 USDC. The funder’s profit share rounds down to 0.000001 USDC; the holder receives the remainder. DemoPass only, with an owner-managed allowlist and one mint per holder.</p>
+        <label className="risk-checkbox"><input type="checkbox" checked={acknowledged} onChange={e => setAcknowledged(e.target.checked)} required /> <span>I understand that after minting there is no deadline refund, cancellation, guaranteed buyer or price change. Principal is spent on the mint; the NFT and collateral may remain locked indefinitely. Each holder can mint only once.</span></label>
         <Button type="submit" className="action-button primary-action" disabled={!transaction.ready || transaction.pending || !preview || !acknowledged}>{transaction.pending ? "Waiting for confirmation…" : "Propose agreement ↗"}</Button>
-        <p className="action-help">Proposing moves no USDC. Your counterparty must accept these exact terms before deposits.</p>
+        <p className="action-help">Proposing transfers no ERC-20 USDC, but costs network gas. Your counterparty must accept these exact terms before deposits.</p>
         {error && <p role="alert" className="error">{error}</p>}<TransactionStatus transaction={transaction} />
       </aside>
     </form>

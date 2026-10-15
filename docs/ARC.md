@@ -16,7 +16,7 @@ Checked 2026-10-14 against current official `.io` HTML documentation. These are 
 Native and ERC-20 USDC represent the same underlying balance, not two assets. Use 6 decimals for ERC-20 approve/transferFrom and contract amounts; use 18 decimals for native gas APIs.
 
 ## EVM
-Official infrastructure documentation lists the Osaka hard-fork baseline. Solidity ^0.8.24 is the requested source-language range; the implementation must pin a compiler and compatible EVM target before deployment. No compiler or opcode deployment has been tested yet. `PREVRANDAO` returns zero, blob transactions are unsupported, and multiple blocks can share a timestamp. Do not build deadline logic around block counts or assume PREVRANDAO is random.
+Official infrastructure documentation lists the Osaka hard-fork baseline. Middleman uses Solidity 0.8.24, EVM Paris, optimizer enabled with 200 runs; that build has been deployed, source-verified and exercised on Arc testnet (see `DEPLOYMENTS.md`). `PREVRANDAO` returns zero, blob transactions are unsupported, and multiple blocks can share a timestamp. Do not build deadline logic around block counts or assume PREVRANDAO is random.
 
 ## Sources
 - https://docs.arc.io/arc/references/connect-to-arc

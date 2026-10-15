@@ -1,6 +1,6 @@
 # Deployment runbook — approval required
 
-Status: no public addresses or transaction hashes exist yet. Never substitute local Anvil addresses. Native and ERC-20 USDC are the same underlying balance on Arc (18 and 6 decimal interfaces respectively); leave headroom for gas. Reviewed official docs: https://docs.arc.io/arc/tutorials/deploy-on-arc and https://docs.arc.io/arc/tutorials/install-arc-foundry.
+Status: Arc testnet deployment, scripted settlement and source verification are complete; see [addresses and receipts](DEPLOYMENTS.md). No mainnet deployment exists. Never substitute testnet or local Anvil addresses for mainnet evidence. Native and ERC-20 USDC are the same underlying balance on Arc (18 and 6 decimal interfaces respectively); leave headroom for gas. Reviewed official docs: https://docs.arc.io/arc/tutorials/deploy-on-arc and https://docs.arc.io/arc/tutorials/install-arc-foundry.
 
 ## 1. Testnet first
 
@@ -30,7 +30,7 @@ arc-forge verify-contract "$MIDDLEMAN_ADDRESS" src/Middleman.sol:Middleman \
   --constructor-args "$(arc-cast abi-encode 'constructor(address,uint256,address)' 0x3600000000000000000000000000000000000000 "$MINT_PRICE" "$DEPLOYER_ADDRESS")"
 ```
 
-Run from `contracts/`. Also verify the internally created DemoPass with constructor `(address,uint256,address,address)` = USDC,mintPrice,deployer,Middleman. This is a documented command recipe, not a completed verification claim.
+Run from `contracts/`. Also verify the internally created DemoPass with constructor `(address,uint256,address,address)` = USDC,mintPrice,deployer,Middleman. Both verifications completed with `Pass - Verified` for the testnet addresses in `DEPLOYMENTS.md`; repeat verification for any new deployment.
 
 ## 2. Human mainnet gate
 

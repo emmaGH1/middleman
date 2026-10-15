@@ -1,0 +1,166 @@
+{
+  "chainId": 5042002,
+  "escrow": "0x15C72Ed9a299c69eB1F216ce56710498Cc5Ff8e7",
+  "collection": "0xd792097E69c7846c50144B9De5559f2a7FE7FA3b",
+  "usdc": "0x3600000000000000000000000000000000000000",
+  "mintPrice": "1000000",
+  "deploymentHash": "0x0bbc97a9ad1d8f376dbd3aa1223b4fc7a7417eeef7f033983e5ec2bd50f0b8b5",
+  "deploymentBlock": "67275471",
+  "funding": [
+    {
+      "role": "HOLDER",
+      "address": "0x2BBbC332e6cFD4088B716e78734c91aDaeD2ABDc",
+      "amountUSDC": "2",
+      "hash": "0xfb32bc4b0a958f8c5eabe0567e36872343cf7089918087a7189bd6815c003ef1",
+      "block": "67275522"
+    },
+    {
+      "role": "FUNDER",
+      "address": "0x9386A1e40F2e701F5B9cc296450CA43613031b9E",
+      "amountUSDC": "3",
+      "hash": "0xd958f0fdf1b36b573331655885a29c16b05a65250e52e53d629412a709713d90",
+      "block": "67275530"
+    },
+    {
+      "role": "BUYER",
+      "address": "0x17802B6ccc41d22F8BdF6F930761604CcF16Ae87",
+      "amountUSDC": "5",
+      "hash": "0x49b9983782e5a092b28bc02462fde8a93bfef17a1d8c1c651de0dcd7dc27c8fc",
+      "block": "67275539"
+    }
+  ],
+  "beforeBlock": "67275585",
+  "beforeBalances": {
+    "DEPLOYER": {
+      "address": "0x3183C93bAF4Ae7FE95Bb213a7541b1e8bd8491A2",
+      "nativeAtomic": "9883913797500000000"
+    },
+    "HOLDER": {
+      "address": "0x2BBbC332e6cFD4088B716e78734c91aDaeD2ABDc",
+      "nativeAtomic": "2000000000000000000"
+    },
+    "FUNDER": {
+      "address": "0x9386A1e40F2e701F5B9cc296450CA43613031b9E",
+      "nativeAtomic": "3000000000000000000"
+    },
+    "BUYER": {
+      "address": "0x17802B6ccc41d22F8BdF6F930761604CcF16Ae87",
+      "nativeAtomic": "5000000000000000000"
+    }
+  },
+  "flow": [
+    {
+      "function": "setAllowlisted(address,bool)",
+      "hash": "0x59f8bc4ae0c10d6ebb7bf8cc785b272797d4c366a836ebde573d8e30b36a035f",
+      "block": "67275596",
+      "from": "0x3183c93baf4ae7fe95bb213a7541b1e8bd8491a2",
+      "gasCostNativeAtomic": "1467886875000000"
+    },
+    {
+      "function": "propose(address,address,uint256,uint16,uint64,uint256)",
+      "hash": "0x2dc7bbcb981f373236ac9a80dd9688c92e1616327d877e5f81d58ae48f9ebaad",
+      "block": "67275601",
+      "from": "0x2bbbc332e6cfd4088b716e78734c91adaed2abdc",
+      "gasCostNativeAtomic": "6633803750000000"
+    },
+    {
+      "function": "accept(uint256)",
+      "hash": "0xe91307d824bb010f8339198928875048c4fee1a765868c978b1da5584a5809b3",
+      "block": "67275604",
+      "from": "0x9386a1e40f2e701f5b9cc296450ca43613031b9e",
+      "gasCostNativeAtomic": "1197866250000000"
+    },
+    {
+      "function": "approve(address,uint256)",
+      "hash": "0x7327bea164caea344c6c83f844192791d93c7ab51ff0a3e51bac9980c5c6aa18",
+      "block": "67275608",
+      "from": "0x9386a1e40f2e701f5b9cc296450ca43613031b9e",
+      "gasCostNativeAtomic": "1697788750000000"
+    },
+    {
+      "function": "fund(uint256)",
+      "hash": "0x23548f9db3d0edf7e80f2efbe2567763e8cf428cb78a805fa1ac70c2aa973f48",
+      "block": "67275612",
+      "from": "0x9386a1e40f2e701f5b9cc296450ca43613031b9e",
+      "gasCostNativeAtomic": "2256419375000000"
+    },
+    {
+      "function": "approve(address,uint256)",
+      "hash": "0xbfe44aa8629ecbf4087b1f021fc03225286acb0382c9039bb62d9c5e3078758c",
+      "block": "67275615",
+      "from": "0x2bbbc332e6cfd4088b716e78734c91adaed2abdc",
+      "gasCostNativeAtomic": "1697788750000000"
+    },
+    {
+      "function": "postCollateral(uint256)",
+      "hash": "0x628c448a9903ea6432b7cd3a42c8c4030624769328565422ad5f362ff454d55d",
+      "block": "67275619",
+      "from": "0x2bbbc332e6cfd4088b716e78734c91adaed2abdc",
+      "gasCostNativeAtomic": "2298498125000000"
+    },
+    {
+      "function": "mintAndLock(uint256)",
+      "hash": "0xc6d092243ec0cc11646c1a16685cce029c0ee8a45fb3940036662cee5977a07c",
+      "block": "67275622",
+      "from": "0x2bbbc332e6cfd4088b716e78734c91adaed2abdc",
+      "gasCostNativeAtomic": "6225235625000000"
+    },
+    {
+      "function": "approve(address,uint256)",
+      "hash": "0x7f7eb34589df5f927058f610da925d6205fd0358d6a3f29559e6f719a8bba19f",
+      "block": "67275626",
+      "from": "0x17802b6ccc41d22f8bdf6f930761604ccf16ae87",
+      "gasCostNativeAtomic": "1697788750000000"
+    },
+    {
+      "function": "buy(uint256)",
+      "hash": "0xd12be1028a3e6b1c1274727d57023177cdf40b4597a5f9205a6eb3983b1ef562",
+      "block": "67275630",
+      "from": "0x17802b6ccc41d22f8bdf6f930761604ccf16ae87",
+      "gasCostNativeAtomic": "4747885625000000"
+    }
+  ],
+  "afterBlock": "67275630",
+  "balanceChecks": {
+    "DEPLOYER": {
+      "beforeNativeAtomic": "9883913797500000000",
+      "afterNativeAtomic": "10882445910625000000",
+      "gasNativeAtomic": "1467886875000000",
+      "gasAdjustedDeltaNativeAtomic": "1000000000000000000"
+    },
+    "HOLDER": {
+      "beforeNativeAtomic": "2000000000000000000",
+      "afterNativeAtomic": "2783144673750000000",
+      "gasNativeAtomic": "16855326250000000",
+      "gasAdjustedDeltaNativeAtomic": "800000000000000000"
+    },
+    "FUNDER": {
+      "beforeNativeAtomic": "3000000000000000000",
+      "afterNativeAtomic": "4194847925625000000",
+      "gasNativeAtomic": "5152074375000000",
+      "gasAdjustedDeltaNativeAtomic": "1200000000000000000"
+    },
+    "BUYER": {
+      "beforeNativeAtomic": "5000000000000000000",
+      "afterNativeAtomic": "1993554325625000000",
+      "gasNativeAtomic": "6445674375000000",
+      "gasAdjustedDeltaNativeAtomic": "-3000000000000000000"
+    }
+  },
+  "result": {
+    "dealId": "1",
+    "status": "Sold",
+    "tokenId": "1",
+    "funderPayoutAtomic": "2200000",
+    "holderPayoutAtomic": "1050000",
+    "escrowUSDCAtomic": "0",
+    "nftOwnerAtMint": "0x15C72Ed9a299c69eB1F216ce56710498Cc5Ff8e7",
+    "nftOwnerAfterSale": "0x17802B6ccc41d22F8BdF6F930761604CcF16Ae87",
+    "holderMintTransferNativeAtomic": "0",
+    "gasAdjustedBalancesVerified": true
+  },
+  "sourceVerification": {
+    "Middleman": "Pass - Verified",
+    "DemoPass": "Pass - Verified"
+  }
+}

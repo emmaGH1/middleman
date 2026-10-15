@@ -2,7 +2,8 @@
 
 ## Done
 - Read the user brief and three visual references. Repository was empty.
-- Checked current Arc docs; legacy `.network` / Markdown views can return older testnet-only content while current `.io` HTML documents mainnet. No deployment has been performed.
+- Checked current Arc docs; legacy `.network` / Markdown views can return older testnet-only content while current `.io` HTML documents mainnet.
+- Deployed Middleman and its DemoPass on Arc testnet and source-verified both on Blockscout. Completed the ten-transaction scripted happy path and independently checked receipts, historical NFT custody, settlement and gas-adjusted balances. Exact public evidence is in [DEPLOYMENTS.md](DEPLOYMENTS.md) and [DEPLOYMENTS.json](DEPLOYMENTS.json). No mainnet deployment has occurred.
 - Implemented the Next.js app with landing, deal list/create/detail, mint, and explicitly labelled visual-probe routes.
 - Installed actual shadcn/ui Button with Radix Slot, Tailwind 4, and locally packaged Inter Tight / IBM Plex Mono fonts.
 - Shell lint, TypeScript, tests, ABI check, and production build pass on Next.js 16.4.1; details below.
@@ -15,7 +16,7 @@ The approved model is DemoPass-only atomic minting. There is no holder withdrawa
 - `forge build --sizes` compiled contracts, tests and deployment scripts with Solidity 0.8.24; `MiddlemanTest` passed 16/16, including 1,000 payout fuzz runs.
 - The official Arc Foundry `v0.8.0-2` macOS Apple Silicon release is installed as `~/.local/bin/arc-forge`, `arc-cast`, and `arc-anvil` (release archive SHA-256 verified); this host also needed Homebrew `libusb` 1.0.30. Arc Foundry reports `1.7.1-dev`; standard Foundry 1.8.5 remains installed separately.
 - `arc-forge test --network arc --match-contract MiddlemanTest -vv` passed 16/16 tests, including 1,000 payout fuzz runs. `contracts/foundry.toml` targets Solidity 0.8.24 and EVM Paris, previously compiled and tested with generic Forge. The Arc Foundry test is not a public deployment or proof of deployed Arc runtime behavior.
-- Both Makefile mainnet targets reject when `MAINNET_APPROVED` is unset. No broadcast or deployment was performed.
+- Both Makefile mainnet targets reject when `MAINNET_APPROVED` is unset. Only testnet was broadcast; mainnet remains unapproved.
 - Tests are not an independent audit or proof of real-wallet behavior.
 
 ## Contract setup and verification
@@ -53,17 +54,22 @@ At that baseline, `test` passed4/4 deal tests; `check:abi` confirmed the fronten
 
 For the dependency follow-up, `npm install --package-lock-only` regenerated the lockfile and `npm ci` completed. The required commands then passed in order: `npm run test` (5/5), `npm run check:abi`, `npm run lint`, `npm run typecheck`, and `npm run build`. These are shell/build checks, not real-wallet or public-chain validation.
 
+The configured production build also passed with the verified testnet public settings: chain `5042002`, escrow `0x15C72Ed9a299c69eB1F216ce56710498Cc5Ff8e7`, deployment block `67275471`, local-chain flag `0`, and demo-connector flag `0`. The build environment was isolated to these public values and required host paths; no secret environment variables were bound. This does not validate browser-wallet behavior or deploy the frontend.
+
 The app remains fail-closed when deployment configuration is absent: source configuration requires the escrow address and deployment block, and transaction readiness also requires a connected wallet on the configured chain and a verified deployment.
 
 ## Not done
-- Independent security review, Arc testnet/mainnet deployment, real-wallet or public-chain validation, Vercel deployment.
-- Real demo, submission text, grant rule verification.
+- Independent security review, Arc mainnet deployment, public-chain browser-wallet validation, Vercel deployment.
+- Live-network two-clean-run demo and final recording. Public testnet verification so far is one scripted sale; refund/cancellation and failure-path evidence remain local.
+- Mainnet-only grant requirements are not satisfied by these testnet receipts. No acceptance or submission-update claim is made.
 
-## Immediate continuation gate — testnet faucet
+## Immediate continuation gate — mainnet approval
 
-The original testnet wallet bundle was unavailable after restart. Bounded filename-only searches of likely local storage directories and exact Keychain service checks found no surviving bundle. Replacement testnet-only wallets have now been generated and a personal secure-save prompt for `MIDDLEMAN_TESTNET_WALLETS` has been offered. Accept that prompt before funding; an unsaved shell environment does not survive a restart. No private keys were displayed or committed, and no broadcast occurred.
+The replacement `MIDDLEMAN_TESTNET_WALLETS` bundle is saved, its derived addresses were verified, and the deployer received 20 test USDC. It funded holder/funder/buyer with 2/3/5 test USDC respectively before testnet deployment and settlement. These keys are for testnet only and must not be reused on mainnet or exposed to Vercel. The holder has minted once; another run needs a fresh holder.
 
-Do not fund the old Arc testnet address `0xE1a98416C5c1fECE3931241B2F6E62F91515bD26`: its key is unavailable and its last checked balance was zero. The replacement deployer is `0x3183C93bAF4Ae7FE95Bb213a7541b1e8bd8491A2`. After saving the replacement wallet bundle, fund that address using Arc Testnet at https://faucet.circle.com, then follow `docs/DEPLOYMENT.md` for deployment/flow and public receipts. No public contract deployment has happened. Mainnet still requires separate human approval and a real-funds budget.
+Do not fund the old address `0xE1a98416C5c1fECE3931241B2F6E62F91515bD26`; its key is unavailable. The active testnet deployer is `0x3183C93bAF4Ae7FE95Bb213a7541b1e8bd8491A2`. Mainnet still requires separate human approval, distinct mainnet credentials and a real-funds budget.
+
+`web/.env.example` now contains the verified testnet address and deployment block. Copy it to `.env.local` for a local testnet frontend; missing configuration still disables writes. No public frontend deployment or mainnet label has been enabled.
 
 ## Dependency limitation
 The authored override in `web/package.json` is `"ws@^8.0.0": "8.21.0"`. It consolidates the nested viem/WalletConnect `ws` 8.x branches onto `8.21.0`, matching direct viem `2.57.7`; WalletConnect's `@walletconnect/jsonrpc` `ws@7.5.13` branch remains unchanged. `npm ls ws` verified the override and the unchanged 7.x branch.
@@ -73,8 +79,8 @@ After `npm install --package-lock-only` and `npm ci`, `npm audit --json` reports
 ## Next steps
 Deployment gates are:
 
-1. Establish access to the intended testnet-only deployer, holder, funder, and buyer private keys and verify their public addresses. Never fund an address whose corresponding key is unavailable.
-2. After key access is confirmed, fund only the Arc testnet deployer, execute the documented testnet deployment/flow, and record public receipts. Local browser runs and Arc Foundry tests do not establish public-chain or real-wallet behavior.
-3. Consider mainnet only after testnet evidence, a separate explicit human approval, and a real-funds budget. No mainnet broadcast is authorized by local checks alone.
+1. Stop for separate explicit mainnet approval, a spending cap, agreed immutable mint price and treasury, and acknowledgement of unaudited-contract/resale risk and unresolved dependency findings.
+2. Only after approval, obtain distinct mainnet deployer/holder/funder/buyer credentials securely. Never reuse testnet keys or put keys in web environment variables.
+3. Follow `DEPLOYMENT.md` for mainnet deployment, verification and flow. Publish frontend configuration only for confirmed addresses. Complete the public-chain UI/demo work; script receipts do not prove wallet UI behavior.
 
 No private keys are required for shell checks; with absent deployment configuration transaction readiness remains disabled. Never display a live deployment label without a verified address.

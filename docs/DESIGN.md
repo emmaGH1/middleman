@@ -17,7 +17,7 @@ Editorial, tactile, monochrome, deliberate, contractual.
 - Below the fold: three horizontal process rows, a concise risk note, footer. No testimonials, metrics, FAQ grid or filler.
 
 ## Honest preview boundary
-No deployments exist. CTA is temporarily “Explore a deal” and routes to an explicitly labelled design probe. Do not claim “Live on Arc mainnet” or present a transaction action until real configuration and verified contracts exist.
+This original preview boundary predates the verified Arc testnet deployment; see `DEPLOYMENTS.md`. No mainnet deployment exists. Do not describe testnet as mainnet proof or claim “Live on Arc mainnet”.
 The intended “Start a deal” CTA replaces it only when creation is implemented.
 
 ## Slop review checklist

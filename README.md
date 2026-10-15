@@ -2,7 +2,7 @@
 
 The contract in between the wallet with a whitelist spot and the wallet with USDC.
 
-**Implemented and locally tested. Not deployed on Arc. Not audited. Do not send real funds.**
+**Deployed and script-tested on Arc testnet. Not deployed on mainnet. Not audited. Do not send real funds.**
 
 Middleman is a DemoPass-only USDC escrow. A whitelist holder and funder agree immutable terms, deposit collateral and principal, then mint the NFT directly into escrow. Payment and custody succeed in the same transaction or both revert. A fixed-price purchase transfers the NFT and settles the split automatically.
 
@@ -14,7 +14,16 @@ Middleman is a DemoPass-only USDC escrow. A whitelist holder and funder agree im
 - 16 contract tests, including atomic rollback, custody, timeout, cancellation and 1,000 payout fuzz cases.
 - Next.js routes `/deals`, `/deals/new`, `/deals/[id]`, `/mint` with wagmi/viem, RainbowKit, deployment binding checks, simulation and confirmed receipts.
 - Two clean local production-browser sale runs, plus a recorded third run, against real contracts on Anvil with test USDC. These are not Arc transactions or a mainnet demo.
-- Arc-aware deployment and scripted flow, with an explicit mainnet approval gate. Public deployment and the submission demo remain pending.
+- Arc testnet deployment and ten-transaction scripted flow completed: deal 1 sold, NFT delivered to buyer, payouts and gas-adjusted balance changes verified against RPC. Both contracts are source-verified. Mainnet and the submission demo remain pending.
+
+## Verified Arc testnet deployment
+
+- [Middleman escrow](https://explorer.testnet.arc.io/address/0x15C72Ed9a299c69eB1F216ce56710498Cc5Ff8e7)
+- [DemoPass](https://explorer.testnet.arc.io/address/0xd792097E69c7846c50144B9De5559f2a7FE7FA3b)
+- [Deployment transaction](https://explorer.testnet.arc.io/tx/0x0bbc97a9ad1d8f376dbd3aa1223b4fc7a7417eeef7f033983e5ec2bd50f0b8b5)
+- [Completed sale](https://explorer.testnet.arc.io/tx/0xd12be1028a3e6b1c1274727d57023177cdf40b4597a5f9205a6eb3983b1ef562)
+
+See [deployment evidence](docs/DEPLOYMENTS.md) for the full receipt list, amounts and verification boundaries. These are **testnet**, not proof of a mainnet deployment.
 
 ## Local development
 
@@ -24,7 +33,7 @@ npm install
 npm run dev
 ```
 
-Open `/` for the landing page and `/deals/new` for agreement creation. Without public deployment configuration, transactions are disabled. Copy `web/.env.example` to `web/.env.local` only when verified contract addresses and deployment block are available. Never put private keys in any web environment. The historical `/deals/probe` remains explicitly labelled non-live.
+Open `/` for the landing page and `/deals/new` for agreement creation. Without public deployment configuration, transactions are disabled. Copy `web/.env.example` to `web/.env.local` to use the verified testnet deployment, then restart/rebuild. Never put private keys in any web environment. The historical `/deals/probe` remains explicitly labelled non-live.
 
 ```sh
 npm run test
@@ -42,4 +51,4 @@ Contract setup and exact verification commands are in [current state](docs/CURRE
 
 ## Release blockers
 
-No Arc testnet/mainnet or Vercel deployment exists yet. Local Anvil does not reproduce native-USDC gas behavior or validate real wallet confirmations. Dependency audit findings remain in the wallet/ESLint trees (see current state); there is no independent contract audit. Resolve/review these before considering real funds. Public deployment proof remains unavailable; no Arc testnet/mainnet receipts have been recorded.
+No mainnet or Vercel deployment exists yet. The public-chain flow was executed by scripts, not browser-wallet confirmations. Dependency audit findings remain in the wallet/ESLint trees (see current state); there is no independent contract audit. Resolve/review these before considering real funds. Mainnet requires separate human approval and credentials; testnet receipts do not satisfy a mainnet-only submission requirement.

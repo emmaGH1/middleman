@@ -18,10 +18,15 @@ export default function Home() {
         <div className="hero-topline mono"><span>WHITELIST DEALS, REWRITTEN.</span><span>01 — THE CONNECTION</span></div>
         <div className="hero-copy">
           <h1 id="hero-heading">A spot. A backer.<br /><span>No leap of faith.</span></h1>
-          <div className="hero-aside"><p>You have the whitelist.<br />They have the USDC.<br />Put a contract between you.</p><Button asChild variant="link" size={null} className="primary-link rounded-none shadow-none focus-visible:ring-0 active:translate-y-0"><Link href="/deals/new">Start a deal <span aria-hidden="true">↗</span></Link></Button><span className="preview-note mono">DEMOPASS ONLY · CHECK DEPLOYMENT IN APP</span></div>
+          <p className="hero-description">You have the whitelist. They have the USDC.<br />Put a contract between you.</p>
+          <div className="hero-actions">
+            <Button asChild variant="link" size={null} className="primary-link rounded-none shadow-none"><Link href="/deals/new">Start an agreement <span aria-hidden="true">→</span></Link></Button>
+            <Link href="/deals" className="secondary-link">View agreements</Link>
+          </div>
+          <span className="preview-note mono">DEMOPASS ONLY · USDC ESCROW ON ARC</span>
         </div>
         <EscrowArt />
-        <div className="hero-bottom mono"><span>TWO WALLETS. ONE AGREEMENT.</span><a href="#how-it-works">SCROLL TO UNDERSTAND <span aria-hidden="true">↓</span></a><span>USDC / NFT / ARC</span></div>
+        <div className="hero-bottom mono"><span>TWO WALLETS. ONE AGREEMENT.</span><a href="#how-it-works">HOW IT WORKS <span aria-hidden="true">↓</span></a><a href="https://www.arc.io/" target="_blank" rel="noreferrer">BUILT ON ARC ↗</a></div>
       </section>
       <section id="how-it-works" className="how-section" aria-labelledby="how-heading">
         <div className="section-heading"><span className="mono">02 — THE AGREEMENT</span><h2 id="how-heading">Less “trust me.”<br />More set in code.</h2><p>From a handshake in your DMs<br />to terms you can both see.</p></div>

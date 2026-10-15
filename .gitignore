@@ -9,3 +9,4 @@ cache/
 playwright-report/
 test-results/
 broadcast/
+.vercel/

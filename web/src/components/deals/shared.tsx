@@ -21,7 +21,7 @@ export function DeploymentNotice() {
   if (!configured) return <div className="deployment-notice"><span className="mono">NOT CONFIGURED / TRANSACTIONS DISABLED</span><p>The network, contract address or deployment block is missing or invalid. These screens cannot accept deposits. Check the public deployment settings.</p></div>;
   if (deployment.isError) return <div className="deployment-notice error" role="alert">Cannot verify deployment: {deployment.error.message}. Transactions disabled.</div>;
   if (!deployment.data) return <div className="deployment-notice mono">VERIFYING {chain.name.toUpperCase()} DEPLOYMENT…</div>;
-  return <div className="deployment-notice mono"><span>{chain.name.toUpperCase()} · NOT AUDITED</span> <ChainLink path={`address/${escrowAddress}`}>{escrowAddress}</ChainLink></div>;
+  return <div className="deployment-notice mono"><span>{chain.name.toUpperCase()} · NOT AUDITED</span> <ChainLink path={`address/${escrowAddress}`}>{escrowAddress}</ChainLink>{chain.id === 5042 && <p>Contracts deployed on mainnet. End-to-end deal testing was performed on testnet only. This is an unaudited demonstration, not a production-audited financial service.</p>}</div>;
 }
 
 export function ChainLink({ path, children }: { path: string; children: React.ReactNode }) {

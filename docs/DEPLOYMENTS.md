@@ -1,6 +1,30 @@
-# Verified deployment — Arc testnet only
+# Deployment evidence — Arc mainnet and testnet
 
-No mainnet deployment exists. These receipts must not be described as mainnet proof.
+## Arc mainnet — deployment only
+
+Deployed after explicit human approval on October 15, 2026. **No funded mainnet deal, mint or sale was run.** End-to-end deal evidence below is from testnet, not mainnet.
+
+| Field | RPC-confirmed value |
+| --- | --- |
+| Network | Arc mainnet, chain ID `5042` |
+| Middleman | [`0x18f7407d76429f66a5a977eac0a71cbc9fe05036`](https://explorer.arc.io/address/0x18f7407d76429f66a5a977eac0a71cbc9fe05036) |
+| DemoPass | [`0xEdD3cBF58B797B2d4bc06e62C1cFbD42e4BaD229`](https://explorer.arc.io/address/0xEdD3cBF58B797B2d4bc06e62C1cFbD42e4BaD229) |
+| Deployment transaction | [`0x57a9677d2613a7e1fcf6f28381ff08256245b46c03f2f8d63b518269e3f7d6d6`](https://explorer.arc.io/tx/0x57a9677d2613a7e1fcf6f28381ff08256245b46c03f2f8d63b518269e3f7d6d6) |
+| Deployment block | `26090372` |
+| USDC interface | `0x3600000000000000000000000000000000000000` |
+| Immutable mint price | `10000` atomic units = **0.01 USDC** |
+| DemoPass owner/treasury | `0xA4697789777947a670a647cB1139f86E58C764Ee` |
+| Actual deployment fee | **0.074113725 USDC**; approved cap 0.25 USDC |
+| Compiler | Solidity `0.8.24`, EVM Paris, optimizer 200 runs |
+| Source verification | **Pending:** explorer API returned Cloudflare challenge HTML, not a verification result |
+
+The one creation transaction deploys both contracts. Live RPC readback confirmed Middleman's USDC/collection bindings and DemoPass's USDC, escrow, owner, treasury and mint price. Runtime code exists at both addresses. This is deployment/configuration evidence, not an independent audit or successful mainnet deal.
+
+The bounded deployment used compiled Foundry bytecode through viem with a fixed 4,000,000 gas limit and 50 Gwei maximum fee per gas: maximum transaction fee 0.20 USDC, below the approved 0.25 cap. Actual gas used was 3,529,225 at 21 Gwei. The fresh deployer was not reused from testnet. Public raw evidence is in [MAINNET_DEPLOYMENT.json](MAINNET_DEPLOYMENT.json).
+
+## Arc testnet — source-verified and settled
+
+The following contracts and receipts are **testnet**. They must not be presented as mainnet settlement evidence.
 
 ## Contracts
 

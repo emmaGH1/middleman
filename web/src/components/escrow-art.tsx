@@ -33,7 +33,7 @@ export function EscrowArt() {
       </g>
       <g className="vault-type" fill="currentColor" textAnchor="middle">
         <text x="704" y="194" fontSize="11" letterSpacing="1">[ MIDDLEMAN ]</text>
-        <text x="704" y="268" fontSize="8" letterSpacing="2">TERMS, NOT TRUST</text>
+        <text x="704" y="268" fontSize="8" letterSpacing="2">USDC ESCROW</text>
         <text x="720" y="355" fontSize="10" letterSpacing="2">THE CONTRACT IN BETWEEN</text>
       </g>
       <g className="wallet-label" fill="currentColor">

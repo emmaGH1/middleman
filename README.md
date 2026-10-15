@@ -18,6 +18,14 @@ Middleman explores a different arrangement: agree on the terms first, escrow the
 - **[Testnet sale receipt](https://explorer.testnet.arc.io/tx/0x702548496f0668b165de00ef396c79659de358af0aa07cbd4affda168a2591bd)** — wallet-driven NFT purchase and settlement on Arc testnet.
 - **[Deployment evidence](docs/DEPLOYMENTS.md)** · **[Security and financial rules](docs/SECURITY.md)** · **[Design rationale](docs/DESIGN.md)**
 
+## V2 Deal Room (preview work, not promoted to production)
+
+Shareable deal rooms now combine role-specific actions, live state and NFT custody, a six-decimal USDC ledger, immutable terms, pre-authorization risk disclosures and RPC-verified transaction receipts. Computed payouts remain distinct from receipt-backed payments. Pending broadcasts can be reconciled before another action is attempted.
+
+Arc Studio contributed the receipt/event adapter and tests. Devin reviewed and hardened that code, integrated it and built the Deal Room. See [contribution provenance](docs/ARC_STUDIO_V2.md) and [verification / remaining gates](docs/CURRENT_STATE.md#v2-deal-room-development-checkpoint).
+
+This branch does not replace the deployed contracts or promote the production frontend. Indexed history may be unavailable or incomplete; the room labels its bounded RPC fallback and supports checking a known transaction hash.
+
 ## How a deal works
 
 1. **Propose:** set the allowlisted holder, funder, collateral, deadlines, fixed sale price and profit split.

@@ -31,16 +31,18 @@ export function ChainLink({ path, children }: { path: string; children: React.Re
 
 export function AppFrame({ title, eyebrow, children }: { title: string; eyebrow: string; children: React.ReactNode }) {
   return <main className="deal-probe workspace"><div className="workspace-toolbar"><Link href="/deals" className="mono back-link">← MY AGREEMENTS</Link><WalletButton /></div>
-    <div className="probe-heading"><div><span className="mono">{eyebrow}</span><h1>{title}</h1></div><p>One whitelist. Two signatures.<br />No money leaves without the NFT.</p></div>
+    <div className="probe-heading"><div><span className="mono">{eyebrow}</span><h1>{title}</h1></div><p>Whitelist access meets USDC.<br />Terms, custody and receipts.</p></div>
     <DeploymentNotice />{children}
-    <p className="probe-disclaimer">DemoPass only. Not audited. Failed minting keeps principal in escrow; after a successful mint, repayment depends on a buyer. Funds and collateral may remain locked indefinitely. USDC restrictions can prevent transfers.</p>
+    <p className="probe-disclaimer">DemoPass only. Not audited. Failed minting keeps principal in escrow; after a successful mint, repayment depends on a buyer. The NFT and collateral may remain locked indefinitely. USDC restrictions can prevent transfers.</p>
   </main>;
 }
 
 export function TransactionStatus({ transaction }: { transaction: ReturnType<typeof useTransaction> }) {
   return <div className="transaction-status" aria-live="polite">
+    {!transaction.ready && !transaction.pending && <p>{transaction.readiness}</p>}
     {transaction.message && <p>{transaction.message}</p>}
     {transaction.error && <p className="error" role="alert">{transaction.error}</p>}
     {transaction.hashes.map(hash => <div key={hash} className="mono"><ChainLink path={`tx/${hash}`}>{hash}</ChainLink></div>)}
+    {transaction.unresolved && <div><p>Unresolved broadcast: {transaction.unresolved.label}. Recovery is saved in this browser tab when session storage is available.</p><ChainLink path={`tx/${transaction.unresolved.hash}`}>{transaction.unresolved.hash}</ChainLink><Button className="action-button" disabled={transaction.pending} onClick={() => void transaction.reconcile()}>Reconcile receipt</Button></div>}
   </div>;
 }

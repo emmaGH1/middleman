@@ -1,5 +1,18 @@
 # Current state
 
+## V2 Deal Room development checkpoint
+
+The V2 feature branch preserves the current branding and deployed contracts. It adds role/deadline action gating, pinned state/payout/NFT reads, a six-decimal USDC ledger, pre-authorization risk disclosure, verified event history and pending-broadcast reconciliation. [Arc Studio provenance](ARC_STUDIO_V2.md) identifies its actual adapter/test contribution and the manual integration corrections.
+
+Completed on this branch:
+
+- `forge build --sizes`; standard Foundry and Arc Foundry `MiddlemanTest`: 20/20 each, including 1,000 fuzz runs. These are local tests, not a new public-chain execution.
+- Frontend: 40/40 tests, ABI consistency, TypeScript and Next.js 16.4.1 production build with isolated public Arc testnet configuration. Lint: no errors; eight unused-symbol warnings in adapter test fixtures.
+- Lead-rendered read-only review at desktop and 390px. Existing Arc testnet deal 5 showed actual state, NFT ownership and seven verified lifecycle logs, including its historical 2.2/1.05-USDC sale distribution. The 390px page had no horizontal overflow or page errors. This is not a fresh V2 wallet-flow test.
+- An intermittent explorer-index failure was observed. The UI correctly labelled the fallback as a bounded RPC window, omitted unverified payouts and left manual receipt verification available. No complete-history or finality claim is made.
+
+Still outstanding: hosted V2 preview validation, fresh recorded Arc testnet wallet flow, rejection/reconciliation and connected-role browser QA, release decision and V2 demo. Production aliases are unchanged. No funded mainnet deal, new deployment or mainnet signature was performed. Grant eligibility for continued development remains unconfirmed.
+
 ## Latest release — October 15, 2026
 
 **Mainnet deployment only is complete.** Explicit approval covered one deployment with a 0.25-USDC fee cap, 0.01-USDC mint price and a fresh deployer as DemoPass owner/treasury, with audit/dependency/resale risks acknowledged. Actual fee: 0.074113725 USDC. See [DEPLOYMENTS.md](DEPLOYMENTS.md) and [MAINNET_DEPLOYMENT.json](MAINNET_DEPLOYMENT.json) for the actual addresses, receipt and confirmed bindings. Both mainnet contracts now show exact-match source verification via Blockscout Bytecode Database, confirmed in the live browser. The earlier CLI/API requests were challenged by Cloudflare; no successful CLI submission is claimed. No mainnet deal, mint or purchase was run, and no further mainnet spending is authorized.
@@ -8,7 +21,7 @@ The frontend is live at **https://trymiddlemanonarc.vercel.app**, under `emmagh1
 
 Navigation and CTA refinements preserve the monochrome ASCII-vault identity. The mainnet app explicitly separates deployment checks from testnet-only end-to-end validation. The release passed eight web tests, ABI consistency, lint, typecheck and a production build with isolated public mainnet configuration. The Vercel build also passed. No repository CI workflow is configured.
 
-The 90–120-second founder demo remains pending final narration approval: 1080p, clean Mac frame, clearly labelled testnet interaction, owned `my voice` clone with account-available ElevenLabs v4, free licensed quiet music, one-line subtitles below the app. No grant submission or amendment is authorized.
+The earlier founder demo was delivered separately and revised following user review. It is not evidence of the V2 implementation. The new V2 demo remains deferred until product verification; no public demo replacement, grant submission or amendment is authorized.
 
 The sections below retain the historical verification record; earlier test counts and gates describe those revisions, not new spending approval.
 

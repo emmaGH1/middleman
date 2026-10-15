@@ -1,6 +1,6 @@
 # Deployment runbook — approval required
 
-Status: Arc mainnet **deployment only** is complete, with a 0.01-USDC immutable mint price. Source verification is pending an explorer API Cloudflare challenge; no mainnet deal was run. Testnet deployment, scripted/browser settlement and source verification are complete; see [addresses and receipts](DEPLOYMENTS.md). Never substitute testnet or local Anvil addresses for mainnet settlement evidence. Native and ERC-20 USDC are the same underlying balance on Arc (18 and 6 decimal interfaces respectively); leave headroom for gas. Reviewed official docs: https://docs.arc.io/arc/tutorials/deploy-on-arc and https://docs.arc.io/arc/tutorials/install-arc-foundry.
+Status: Arc mainnet **deployment only** is complete, with a 0.01-USDC immutable mint price. Both contracts show exact-match source verification via Blockscout Bytecode Database; no mainnet deal was run. Testnet deployment, scripted/browser settlement and source verification are complete; see [addresses and receipts](DEPLOYMENTS.md). Never substitute testnet or local Anvil addresses for mainnet settlement evidence. Native and ERC-20 USDC are the same underlying balance on Arc (18 and 6 decimal interfaces respectively); leave headroom for gas. Reviewed official docs: https://docs.arc.io/arc/tutorials/deploy-on-arc and https://docs.arc.io/arc/tutorials/install-arc-foundry.
 
 ## 1. Testnet first
 
@@ -36,9 +36,23 @@ Run from `contracts/`. Also verify the internally created DemoPass with construc
 
 **Deployment-only approval was granted and consumed for the recorded deployment.** The approved fee cap was 0.25 USDC, mint price 0.01 USDC, and fresh deployer was the agreed DemoPass owner/treasury. No additional deployment or funded flow is authorized by that approval. Obtain new explicit approval for further spending. A funded mainnet flow additionally needs three separate role wallets, a per-deal budget and risk acknowledgement. Do not reuse testnet keys or automatically set `MAINNET_APPROVED=true`.
 
-Both Solidity scripts and Makefile reject mainnet without `MAINNET_APPROVED=true`. A flag alone is not human approval. After approval and live chain-ID verification for `5042`: `make deploy-mainnet`, source verification against the mainnet explorer, then `make flow-mainnet`. This script buys the NFT and moves actual funds; do not run it as a harmless smoke test.
+Both Solidity scripts and Makefile reject mainnet without `MAINNET_APPROVED=true`. A flag alone is not human approval. The existing deployment must not be repeated automatically. `make flow-mainnet` buys the NFT and moves real funds; it is outside the consumed deployment-only approval and must not be run as a harmless smoke test.
 
 ## 3. Frontend / Vercel
+
+Live: **https://trymiddlemanonarc.vercel.app**. Project: `emmagh1s-projects/trymiddlemanonarc` (Hobby), Next.js preset, Node 24.x, web-directory CLI deployment. The initial production release was built from `ddfed84`. No Git auto-deploy integration has been configured.
+
+Production public configuration:
+
+```env
+NEXT_PUBLIC_ARC_CHAIN_ID=5042
+NEXT_PUBLIC_MIDDLEMAN_ADDRESS=0x18f7407d76429f66a5a977eac0a71cbc9fe05036
+NEXT_PUBLIC_DEPLOYMENT_BLOCK=26090372
+NEXT_PUBLIC_LOCAL_CHAIN=0
+NEXT_PUBLIC_DEMO_CONNECTOR=0
+```
+
+Hosted read-only checks passed on desktop/mobile: public HTTP 200, confirmed deployment notice and addresses, 0.01-USDC mint price, no page errors or mobile overflow. No funded mainnet flow was attempted. `.vercelignore` excludes environment files; the deployment input review contained no credential files.
 
 Set public variables only: `NEXT_PUBLIC_ARC_CHAIN_ID`, `NEXT_PUBLIC_MIDDLEMAN_ADDRESS`, `NEXT_PUBLIC_DEPLOYMENT_BLOCK`, optionally `NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID`. The app validates the escrow/collection/USDC binding against the RPC before enabling writes. Local/demo flags are rejected on Vercel builds. Never deploy burner keys or injected local testing providers.
 

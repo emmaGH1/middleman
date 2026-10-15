@@ -16,11 +16,13 @@ Deployed after explicit human approval on October 15, 2026. **No funded mainnet 
 | DemoPass owner/treasury | `0xA4697789777947a670a647cB1139f86E58C764Ee` |
 | Actual deployment fee | **0.074113725 USDC**; approved cap 0.25 USDC |
 | Compiler | Solidity `0.8.24`, EVM Paris, optimizer 200 runs |
-| Source verification | **Pending:** explorer API returned Cloudflare challenge HTML, not a verification result |
+| Source verification | Both contracts: **source code verified (exact match)** via Blockscout Bytecode Database |
 
 The one creation transaction deploys both contracts. Live RPC readback confirmed Middleman's USDC/collection bindings and DemoPass's USDC, escrow, owner, treasury and mint price. Runtime code exists at both addresses. This is deployment/configuration evidence, not an independent audit or successful mainnet deal.
 
 The bounded deployment used compiled Foundry bytecode through viem with a fixed 4,000,000 gas limit and 50 Gwei maximum fee per gas: maximum transaction fee 0.20 USDC, below the approved 0.25 cap. Actual gas used was 3,529,225 at 21 Gwei. The fresh deployer was not reused from testnet. Public raw evidence is in [MAINNET_DEPLOYMENT.json](MAINNET_DEPLOYMENT.json).
+
+Source verification was confirmed in the live explorer contract tabs on October 15, 2026: [Middleman source](https://explorer.arc.io/address/0x18f7407d76429f66a5a977eac0a71cbc9fe05036?tab=contract) and [DemoPass source](https://explorer.arc.io/address/0xEdD3cBF58B797B2d4bc06e62C1cFbD42e4BaD229?tab=contract). Both showed exact-match verification through Blockscout Bytecode Database, Solidity `v0.8.24+commit.e11b9ed9`, Paris and 200 optimizer runs, with the expected constructor arguments. Direct CLI/API verification attempts had returned Cloudflare challenges; these are not being represented as successful submissions. Explorer source matching is not a security audit.
 
 ## Arc testnet — source-verified and settled
 
@@ -75,7 +77,7 @@ The `Sold` event and `salePayout(1)` both report `2200000 / 1050000`. Native bal
 
 [Machine-readable public evidence](DEPLOYMENTS.json) contains funding receipts, all flow receipts, pinned balance snapshots, gas calculations and final assertions. It contains no keys.
 
-The original JSON proves one scripted happy-path execution on public Arc testnet. The browser-wallet run below is separate evidence, not a mainnet run, audit, refund-path test on Arc, or guarantee of future execution. Local failure/refund/cancellation tests are documented separately in `CURRENT_STATE.md`. The original holder has already minted; do not replay this flow with that holder. Mainnet, Vercel and the final submission demo remain gated/pending.
+The original JSON proves one scripted happy-path execution on public Arc testnet. The browser-wallet run below is separate evidence, not a mainnet run, audit, refund-path test on Arc, or guarantee of future execution. Local failure/refund/cancellation tests are documented separately in `CURRENT_STATE.md`. The original holder has already minted; do not replay this flow with that holder. Mainnet deployment/source verification and Vercel hosting are now complete (see above); the founder demo remains pending. No mainnet deal has been run.
 
 ## Browser-wallet deal 2
 
@@ -93,4 +95,4 @@ The application at revision `615186b` completed a second sale on the same public
 
 The app displayed `Sold`, gross sale payouts of 2.20/1.05 test USDC and zero reserves. NFT 2 reached the buyer; the sale receipt matched those payouts and escrow's USDC balance was zero. Minting paid the treasury 1 test USDC and put NFT 2 in escrow without paying mint principal to the holder. Role-restricted controls, receipt links and the prior deal 1 display passed browser checks. Separate missing/combined-invalid configuration screens disabled transaction buttons.
 
-**Limits:** Rabby displayed “Simulation Not Supported / Unknown Signature Type” for custom-network contract calls. Chain, signer, destination and decoded calldata were checked before each signature. Helper-label/raw-preview timing corrections interrupted the procedure, but produced no duplicate or failed deal transactions. This is not the final uninterrupted submission demo. Other browser wallets, individual invalid-config permutations, public-chain refund/failure cases, mainnet and Vercel remain untested. Both holders used for deals 1 and 2 have consumed their one eligible mint.
+**Limits:** Rabby displayed “Simulation Not Supported / Unknown Signature Type” for custom-network contract calls. Chain, signer, destination and decoded calldata were checked before each signature. Helper-label/raw-preview timing corrections interrupted the procedure, but produced no duplicate or failed deal transactions. This is not the final uninterrupted submission demo. Other browser wallets, individual invalid-config permutations and public-chain refund/failure cases were not tested in this flow; mainnet deal validation remains untested. Hosted Vercel read-only checks are documented in [CURRENT_STATE.md](CURRENT_STATE.md). Both holders used for deals 1 and 2 have consumed their one eligible mint.

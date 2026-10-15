@@ -2,9 +2,11 @@
 
 ## Latest release — October 15, 2026
 
-**Mainnet deployment only is complete.** Explicit approval covered one deployment with a 0.25-USDC fee cap, 0.01-USDC mint price and a fresh deployer as DemoPass owner/treasury, with audit/dependency/resale risks acknowledged. Actual fee: 0.074113725 USDC. See [DEPLOYMENTS.md](DEPLOYMENTS.md) and [MAINNET_DEPLOYMENT.json](MAINNET_DEPLOYMENT.json) for the actual addresses, receipt and confirmed bindings. Source verification is pending the explorer API's Cloudflare challenge. No mainnet deal, mint or purchase was run, and no further mainnet spending is authorized.
+**Mainnet deployment only is complete.** Explicit approval covered one deployment with a 0.25-USDC fee cap, 0.01-USDC mint price and a fresh deployer as DemoPass owner/treasury, with audit/dependency/resale risks acknowledged. Actual fee: 0.074113725 USDC. See [DEPLOYMENTS.md](DEPLOYMENTS.md) and [MAINNET_DEPLOYMENT.json](MAINNET_DEPLOYMENT.json) for the actual addresses, receipt and confirmed bindings. Both mainnet contracts now show exact-match source verification via Blockscout Bytecode Database, confirmed in the live browser. The earlier CLI/API requests were challenged by Cloudflare; no successful CLI submission is claimed. No mainnet deal, mint or purchase was run, and no further mainnet spending is authorized.
 
-Vercel account access is authorized on the Hobby plan; the `trymiddlemanonarc` project is created and linked, but publication is in progress. Navigation and CTA refinements preserve the monochrome ASCII-vault identity. The mainnet app explicitly separates deployment checks from testnet-only end-to-end validation.
+The frontend is live at **https://trymiddlemanonarc.vercel.app**, under `emmagh1s-projects/trymiddlemanonarc` on Vercel Hobby. Production deployment `dpl_GTCV1TbKF3993qY3kb96715BUp2a` built from `ddfed84` passed and received the requested alias. Only five public configuration variables were added; local/demo flags are zero and environment files are excluded from uploads. Unauthenticated HTTP returned 200. Hosted desktop/mobile read-only checks confirmed the mainnet deployment notice, correct addresses, 0.01-USDC mint price, no page errors and no mobile overflow. No wallet connection, signature or mainnet transaction was performed during those checks.
+
+Navigation and CTA refinements preserve the monochrome ASCII-vault identity. The mainnet app explicitly separates deployment checks from testnet-only end-to-end validation. The release passed eight web tests, ABI consistency, lint, typecheck and a production build with isolated public mainnet configuration. The Vercel build also passed. No repository CI workflow is configured.
 
 The 90–120-second founder demo remains pending final narration approval: 1080p, clean Mac frame, clearly labelled testnet interaction, owned `my voice` clone with account-available ElevenLabs v4, free licensed quiet music, one-line subtitles below the app. No grant submission or amendment is authorized.
 
@@ -72,7 +74,7 @@ For the hardening follow-up, the subprocess config suite passed 3/3 while import
 The app remains fail-closed when deployment configuration is absent: source configuration requires the escrow address and deployment block, and transaction readiness also requires a connected wallet on the configured chain and a verified deployment.
 
 ## Not done
-- Independent security review, mainnet source verification and deal validation, completed Vercel rollout, other browser wallets and remote/mobile SDK pairing.
+- Independent security review, mainnet deal validation, other browser wallets and remote/mobile SDK pairing.
 - Live-network two-clean-run demo and final recording. Public testnet verification includes one scripted sale and one Rabby/UI sale; refund/cancellation and failure-path evidence remain local.
 - Mainnet-only grant requirements are not satisfied by these testnet receipts. No acceptance or submission-update claim is made.
 
@@ -82,7 +84,7 @@ The replacement `MIDDLEMAN_TESTNET_WALLETS` bundle is saved, its derived address
 
 Do not fund the old address `0xE1a98416C5c1fECE3931241B2F6E62F91515bD26`; its key is unavailable. The active testnet deployer is `0x3183C93bAF4Ae7FE95Bb213a7541b1e8bd8491A2`. The later mainnet deployment used a distinct fresh deployer, explicit approval and a bounded fee budget. Further transactions require separate approval.
 
-`web/.env.example` now contains the verified testnet address and deployment block. Copy it to `.env.local` for a local testnet frontend; missing configuration still disables writes. At that revision no hosted app existed. Mainnet deployment is now confirmed; frontend publication is in progress.
+`web/.env.example` contains the verified testnet address and deployment block. Copy it to `.env.local` for a local testnet frontend; missing configuration still disables writes. The later hosted mainnet release uses the separately recorded mainnet configuration, as described above.
 
 ## Public-testnet browser verification
 
@@ -103,8 +105,8 @@ The public Rabby browser verification at `615186b` predates this dependency-reme
 
 ## Next steps
 
-1. Complete source verification when explorer access permits and publish the mainnet frontend with clear deployment-only/testnet-validation boundaries.
-2. Complete the approved testnet founder demo and hosted read-only checks. Script receipts do not prove wallet UI behavior.
+1. Keep the public mainnet frontend's deployment-only/testnet-validation boundaries intact; deployment and source verification are now complete.
+2. Complete the approved testnet founder demo after final narration approval. Script receipts do not prove wallet UI behavior.
 3. Obtain separate approval and role wallets before any funded mainnet deal. Never reuse testnet keys or put keys in frontend/Vercel variables.
 4. Do not submit or amend the grant application.
 

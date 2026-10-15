@@ -4,13 +4,13 @@
 
 USDC escrow for NFT whitelist deals on Arc. A whitelist holder brings access; a funder brings capital. Both agree onchain terms instead of sending money to a stranger. DemoPass mint payment and NFT delivery into escrow happen atomically; a later fixed-price purchase distributes the proceeds.
 
-**Deployed on Arc mainnet; end-to-end deal validation on testnet only. Unaudited.** Mainnet source verification is pending an explorer API access issue. No funded mainnet deal has been run.
+**Deployed on Arc mainnet; end-to-end deal validation on testnet only. Unaudited.** Both contracts are source-verified on the mainnet explorer. No funded mainnet deal has been run.
 
 ![Middleman homepage](docs/homepage.png)
 
 ## Start here
 
-- **App target:** https://trymiddlemanonarc.vercel.app — hosting rollout in progress.
+- **Live app:** https://trymiddlemanonarc.vercel.app — Arc mainnet, deployment-only demonstration.
 - **[Mainnet deployment receipt](https://explorer.arc.io/tx/0x57a9677d2613a7e1fcf6f28381ff08256245b46c03f2f8d63b518269e3f7d6d6)** — actual contract creation, not a placeholder.
 - **[Testnet sale receipt](https://explorer.testnet.arc.io/tx/0x702548496f0668b165de00ef396c79659de358af0aa07cbd4affda168a2591bd)** — real-wallet browser flow, not mainnet settlement.
 - **Founder walkthrough:** in production; will distinguish testnet interaction from mainnet deployment.
@@ -36,7 +36,8 @@ USDC escrow for NFT whitelist deals on Arc. A whitelist holder brings access; a 
 | Immutable DemoPass mint price | **0.01 USDC** |
 | Creation fee, both contracts | **0.074113725 USDC** |
 | Checks completed | Successful receipt; code and USDC/collection/escrow/owner/treasury/price bindings read back from RPC |
-| Pending | Explorer source verification; complete mainnet deal validation |
+| Source verification | Both contracts: exact match via Blockscout Bytecode Database |
+| Not performed | Complete funded mainnet deal validation |
 
 [Full deployment evidence](docs/DEPLOYMENTS.md) · [Raw mainnet receipt/configuration](docs/MAINNET_DEPLOYMENT.json)
 

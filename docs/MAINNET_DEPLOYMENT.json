@@ -63,5 +63,17 @@
     "mintPrice": "10000"
   },
   "actualFeeUSDC": "0.074113725",
-  "balanceAfter": "928632275000000000"
+  "balanceAfter": "928632275000000000",
+  "sourceVerification": {
+    "status": "both-contracts-exact-match",
+    "method": "Blockscout Bytecode Database",
+    "observedVia": "Live explorer contract tabs in browser",
+    "observedDate": "2026-10-15",
+    "compiler": "v0.8.24+commit.e11b9ed9",
+    "evmVersion": "paris",
+    "optimizerRuns": 200,
+    "escrowUrl": "https://explorer.arc.io/address/0x18f7407d76429f66a5a977eac0a71cbc9fe05036?tab=contract",
+    "collectionUrl": "https://explorer.arc.io/address/0xEdD3cBF58B797B2d4bc06e62C1cFbD42e4BaD229?tab=contract",
+    "note": "Direct CLI/API requests were challenged by Cloudflare. Explorer exact-match status was observed independently; no successful CLI submission is claimed."
+  }
 }

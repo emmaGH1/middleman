@@ -18,7 +18,7 @@ The approved model is DemoPass-only atomic minting. There is no holder withdrawa
 - `arc-forge test --network arc --match-contract MiddlemanTest -vv` passed 16/16 tests, including 1,000 payout fuzz runs. `contracts/foundry.toml` targets Solidity 0.8.24 and EVM Paris, previously compiled and tested with generic Forge. The Arc Foundry test is not a public deployment or proof of deployed Arc runtime behavior.
 - Both Makefile mainnet targets reject when `MAINNET_APPROVED` is unset. Only testnet was broadcast; mainnet remains unapproved.
 - Tests are not an independent audit or proof of real-wallet behavior.
-- Hardening verification added four local regression cases for mint-payment rollback/retry, holder-payout rollback/retry, refund rollback/retry and callback reentrancy. `forge fmt` passed; the focused suite passed 4/4, and the final generic `forge build --sizes`, `forge test --match-contract MiddlemanTest -vv`, and `arc-forge test --network arc --match-contract MiddlemanTest -vv` gates each passed 20/20. These cases use local MockUSDC/ReentrantBuyer fixtures and do not claim public-chain failure-path coverage. No external security audit was performed.
+- Hardening verification added four local regression cases for mint-payment rollback/retry, holder-payout rollback/retry, refund rollback/retry and callback reentrancy. `forge fmt` and `forge build --sizes` passed; the focused suite passed 4/4, and both `forge test --match-contract MiddlemanTest -vv` and `arc-forge test --network arc --match-contract MiddlemanTest -vv` passed 20/20. These cases use local MockUSDC/ReentrantBuyer fixtures and do not claim public-chain failure-path coverage. No external security audit was performed.
 
 ## Contract setup and verification
 From the repository root:

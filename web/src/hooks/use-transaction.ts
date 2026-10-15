@@ -4,7 +4,7 @@ import { useRef, useState } from "react";
 import { useAccount, usePublicClient, useWalletClient } from "wagmi";
 import { useQueryClient } from "@tanstack/react-query";
 import { BaseError, erc20Abi, type Abi, type Address, type Hash } from "viem";
-import { chain, escrowAddress, usdcAddress } from "@/config/contracts";
+import { chain, configured, escrowAddress, usdcAddress } from "@/config/contracts";
 import { useEscrow } from "./use-escrow";
 
 export function useTransaction() {
@@ -18,7 +18,7 @@ export function useTransaction() {
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
   const [hashes, setHashes] = useState<Hash[]>([]);
-  const ready = !!address && !!wallet && chainId === chain.id && !!deployment.data && !deployment.isError;
+  const ready = configured && !!address && !!wallet && chainId === chain.id && !!deployment.data && !deployment.isError;
 
   async function run(target: Address, abi: Abi, functionName: string, args: readonly unknown[] = [], payment?: { spender: Address; amount: bigint }) {
     if (lock.current) return;

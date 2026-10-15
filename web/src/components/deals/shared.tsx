@@ -18,7 +18,7 @@ export function WalletButton() {
 
 export function DeploymentNotice() {
   const deployment = useEscrow();
-  if (!configured) return <div className="deployment-notice"><span className="mono">NOT DEPLOYED / TRANSACTIONS DISABLED</span><p>No verified contract address is configured. These screens cannot accept deposits. Testnet verification comes before mainnet.</p></div>;
+  if (!configured) return <div className="deployment-notice"><span className="mono">NOT CONFIGURED / TRANSACTIONS DISABLED</span><p>The network, contract address or deployment block is missing or invalid. These screens cannot accept deposits. Check the public deployment settings.</p></div>;
   if (deployment.isError) return <div className="deployment-notice error" role="alert">Cannot verify deployment: {deployment.error.message}. Transactions disabled.</div>;
   if (!deployment.data) return <div className="deployment-notice mono">VERIFYING {chain.name.toUpperCase()} DEPLOYMENT…</div>;
   return <div className="deployment-notice mono"><span>{chain.name.toUpperCase()} · NOT AUDITED</span> <ChainLink path={`address/${escrowAddress}`}>{escrowAddress}</ChainLink></div>;

@@ -23,3 +23,9 @@ Before full funding either party may cancel and deposits are returned. After ful
 - This implementation assumes the documented Arc USDC interface (6 decimals, no transfer fees). Native gas uses the same underlying balance at 18 decimals. Keep gas headroom and never add the two balances.
 
 Compiler is pinned to Solidity 0.8.24, EVM `paris` (a conservative subset of Arc's documented Osaka baseline), with OpenZeppelin 5.0.2. Local Anvil/MockUSDC results do not prove Arc precompile behavior. Arc testnet execution must precede mainnet approval.
+
+## Frontend and dependencies
+
+Public deployments require an explicit Arc chain ID (`5042002` or `5042`), valid nonzero addresses and a numeric deployment block. Missing/unsupported network settings disable deployment reads and transactions instead of silently enabling testnet. Local Anvil requires the exact local opt-in flag and its own token address; Vercel rejects local/demo mode. RPC chain and contract bindings are checked separately before writes.
+
+See [dependency risk review](DEPENDENCIES.md) for unresolved advisories. A passing build or contract suite does not resolve wallet-library vulnerabilities or prove browser-wallet behavior.

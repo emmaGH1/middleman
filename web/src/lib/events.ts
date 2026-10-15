@@ -1,9 +1,9 @@
 import { decodeEventLog, type PublicClient } from "viem";
-import { deploymentBlock, escrowAddress } from "@/config/contracts";
+import { configured, deploymentBlock, escrowAddress } from "@/config/contracts";
 import { middlemanAbi } from "@/config/abi";
 
 export async function readDealEvents(client: PublicClient, id: bigint, before?: bigint) {
-  if (!escrowAddress || deploymentBlock === undefined) throw new Error("No deployment configured.");
+  if (!configured || !escrowAddress || deploymentBlock === undefined) throw new Error("No valid deployment configured.");
   const latest = before ?? await client.getBlockNumber();
   const start = latest >= deploymentBlock + 1999n ? latest - 1999n : deploymentBlock;
   const logs = [];

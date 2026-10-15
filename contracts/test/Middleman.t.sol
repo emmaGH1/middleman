@@ -25,6 +25,25 @@ contract RejectingBuyer is IERC721Receiver {
     }
 }
 
+contract ReentrantBuyer is IERC721Receiver {
+    Middleman immutable escrow;
+    uint256 immutable dealId;
+    bool public reentered;
+    bytes4 public rejection;
+
+    constructor(Middleman escrow_, uint256 dealId_) {
+        escrow = escrow_;
+        dealId = dealId_;
+    }
+
+    function onERC721Received(address, address, uint256, bytes calldata) external returns (bytes4) {
+        bytes memory result;
+        (reentered, result) = address(escrow).call(abi.encodeCall(escrow.buy, (dealId)));
+        rejection = bytes4(result);
+        return IERC721Receiver.onERC721Received.selector;
+    }
+}
+
 contract MiddlemanTest is Test {
     MockUSDC token;
     Middleman escrow;
@@ -119,6 +138,88 @@ contract MiddlemanTest is Test {
         assertFalse(pass.minted(holder));
         assertEq(token.balanceOf(address(escrow)), 125e6);
         assertEq(token.balanceOf(treasury), 0);
+    }
+
+    function testMintPaymentFailureRollsBackAndCanRetry() public {
+        uint256 id = funded();
+        bytes memory reason = abi.encodeWithSignature("Error(string)", "USDC transfer blocked");
+        vm.mockCallRevert(
+            address(token), abi.encodeCall(token.transferFrom, (address(escrow), treasury, COST)), reason
+        );
+        vm.expectRevert(reason);
+        vm.prank(holder);
+        escrow.mintAndLock(id);
+        assertEq(uint256(escrow.getDeal(id).status), uint256(Middleman.Status.Funded));
+        assertEq(escrow.getDeal(id).tokenId, 0);
+        assertEq(token.balanceOf(address(escrow)), COST + COLLATERAL);
+        assertEq(token.balanceOf(treasury), 0);
+        assertEq(token.allowance(address(escrow), address(pass)), 0);
+        assertFalse(pass.minted(holder));
+        assertEq(pass.nextTokenId(), 1);
+        vm.clearMockedCalls();
+        vm.prank(holder);
+        escrow.mintAndLock(id);
+        assertEq(pass.ownerOf(escrow.getDeal(id).tokenId), address(escrow));
+        assertEq(token.balanceOf(treasury), COST);
+    }
+
+    function testHolderPayoutFailureRollsBackEntireSale() public {
+        uint256 id = locked();
+        bytes memory reason = abi.encodeWithSignature("Error(string)", "USDC recipient blocked");
+        vm.mockCallRevert(address(token), abi.encodeCall(token.transfer, (holder, 105e6)), reason);
+        vm.expectRevert(reason);
+        vm.prank(buyer);
+        escrow.buy(id);
+        assertEq(uint256(escrow.getDeal(id).status), uint256(Middleman.Status.NFTLocked));
+        assertEq(pass.ownerOf(escrow.getDeal(id).tokenId), address(escrow));
+        assertEq(token.balanceOf(buyer), 1000e6);
+        assertEq(token.balanceOf(funder), 900e6);
+        assertEq(token.balanceOf(holder), 975e6);
+        assertEq(token.balanceOf(address(escrow)), COLLATERAL);
+        vm.clearMockedCalls();
+        vm.prank(buyer);
+        escrow.buy(id);
+        assertEq(pass.ownerOf(escrow.getDeal(id).tokenId), buyer);
+        assertEq(token.balanceOf(funder), 1120e6);
+        assertEq(token.balanceOf(holder), 1080e6);
+        assertEq(token.balanceOf(address(escrow)), 0);
+    }
+
+    function testRefundPaymentFailureRemainsRetryable() public {
+        uint256 id = funded();
+        vm.warp(escrow.getDeal(id).deliverBy);
+        bytes memory reason = abi.encodeWithSignature("Error(string)", "USDC recipient blocked");
+        vm.mockCallRevert(address(token), abi.encodeCall(token.transfer, (funder, COST + COLLATERAL)), reason);
+        vm.expectRevert(reason);
+        vm.prank(funder);
+        escrow.claimRefund(id);
+        assertEq(uint256(escrow.getDeal(id).status), uint256(Middleman.Status.Funded));
+        assertEq(token.balanceOf(address(escrow)), COST + COLLATERAL);
+        assertEq(token.balanceOf(funder), 900e6);
+        vm.clearMockedCalls();
+        vm.prank(funder);
+        escrow.claimRefund(id);
+        assertEq(uint256(escrow.getDeal(id).status), uint256(Middleman.Status.Refunded));
+        assertEq(token.balanceOf(funder), 1025e6);
+        assertEq(token.balanceOf(address(escrow)), 0);
+    }
+
+    function testReceiverCannotReenterSettlement() public {
+        uint256 id = locked();
+        ReentrantBuyer receiver = new ReentrantBuyer(escrow, id);
+        token.mint(address(receiver), 300e6);
+        vm.prank(address(receiver));
+        token.approve(address(escrow), 300e6);
+        vm.prank(address(receiver));
+        escrow.buy(id);
+        assertFalse(receiver.reentered());
+        assertEq(receiver.rejection(), bytes4(keccak256("ReentrancyGuardReentrantCall()")));
+        assertEq(uint256(escrow.getDeal(id).status), uint256(Middleman.Status.Sold));
+        assertEq(pass.ownerOf(escrow.getDeal(id).tokenId), address(receiver));
+        assertEq(token.balanceOf(address(receiver)), 0);
+        assertEq(token.balanceOf(funder), 1120e6);
+        assertEq(token.balanceOf(holder), 1080e6);
+        assertEq(token.balanceOf(address(escrow)), 0);
     }
 
     function testRefundAtDeadlineAndNoLateMint() public {

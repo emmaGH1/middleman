@@ -10,7 +10,7 @@ export function useEscrow() {
   return useQuery({
     queryKey: ["deployment", chain.id, escrowAddress], enabled: configured && !!client,
     queryFn: async () => {
-      if (!client || !escrowAddress || !usdcAddress) throw new Error("No deployment configured.");
+      if (!configured || !client || !escrowAddress || !usdcAddress) throw new Error("No valid deployment configured.");
       if (await client.getChainId() !== chain.id) throw new Error("RPC chain does not match the configured Arc network.");
       const [collection, token] = await Promise.all([
         client.readContract({ address: escrowAddress, abi: middlemanAbi, functionName: "collection" }),

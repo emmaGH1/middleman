@@ -2,6 +2,9 @@ import { defineChain, getAddress, isAddress, zeroAddress, type Chain } from "vie
 
 const local = process.env.NEXT_PUBLIC_LOCAL_CHAIN === "1";
 const mainnet = process.env.NEXT_PUBLIC_ARC_CHAIN_ID === "5042";
+const localFlag = process.env.NEXT_PUBLIC_LOCAL_CHAIN;
+const networkConfigured = (localFlag === undefined || localFlag === "0" || localFlag === "1")
+  && (local || mainnet || process.env.NEXT_PUBLIC_ARC_CHAIN_ID === "5042002");
 export const chain: Chain = defineChain({
   id: local ? 31337 : mainnet ? 5042 : 5042002,
   name: local ? "Local Anvil (not Arc)" : mainnet ? "Arc Mainnet" : "Arc Testnet",
@@ -19,7 +22,7 @@ export const escrowAddress = address(process.env.NEXT_PUBLIC_MIDDLEMAN_ADDRESS);
 export const usdcAddress = local ? address(process.env.NEXT_PUBLIC_LOCAL_USDC_ADDRESS) : getAddress("0x3600000000000000000000000000000000000000");
 const block = process.env.NEXT_PUBLIC_DEPLOYMENT_BLOCK;
 export const deploymentBlock = block && /^\d+$/.test(block) ? BigInt(block) : undefined;
-export const configured = !!escrowAddress && !!usdcAddress && deploymentBlock !== undefined;
+export const configured = networkConfigured && !!escrowAddress && !!usdcAddress && deploymentBlock !== undefined;
 export function explorerPath(path: string) {
   const explorer = chain.blockExplorers?.default.url;
   return explorer ? `${explorer}/${path}` : undefined;

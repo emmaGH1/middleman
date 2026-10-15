@@ -18,6 +18,7 @@ The approved model is DemoPass-only atomic minting. There is no holder withdrawa
 - `arc-forge test --network arc --match-contract MiddlemanTest -vv` passed 16/16 tests, including 1,000 payout fuzz runs. `contracts/foundry.toml` targets Solidity 0.8.24 and EVM Paris, previously compiled and tested with generic Forge. The Arc Foundry test is not a public deployment or proof of deployed Arc runtime behavior.
 - Both Makefile mainnet targets reject when `MAINNET_APPROVED` is unset. Only testnet was broadcast; mainnet remains unapproved.
 - Tests are not an independent audit or proof of real-wallet behavior.
+- Hardening verification added four local regression cases for mint-payment rollback/retry, holder-payout rollback/retry, refund rollback/retry and callback reentrancy. `forge fmt` passed; the focused suite passed 4/4, and the final generic `forge build --sizes`, `forge test --match-contract MiddlemanTest -vv`, and `arc-forge test --network arc --match-contract MiddlemanTest -vv` gates each passed 20/20. These cases use local MockUSDC/ReentrantBuyer fixtures and do not claim public-chain failure-path coverage. No external security audit was performed.
 
 ## Contract setup and verification
 From the repository root:
@@ -56,6 +57,8 @@ For the dependency follow-up, `npm install --package-lock-only` regenerated the 
 
 The configured production build also passed with the verified testnet public settings: chain `5042002`, escrow `0x15C72Ed9a299c69eB1F216ce56710498Cc5Ff8e7`, deployment block `67275471`, local-chain flag `0`, and demo-connector flag `0`. The build environment was isolated to these public values and required host paths; no secret environment variables were bound. This does not validate browser-wallet behavior or deploy the frontend.
 
+For the hardening follow-up, the subprocess config suite passed 3/3 while importing the actual config module. It covers the explicit Arc network allowlist, exact local opt-in and local USDC requirement, and invalid address/block fail-closed behavior. The expanded `npm run test` then passed 8/8; `npm run check:abi`, `npm run lint`, `npm run typecheck`, and the configured production build also passed. The 27 dependency findings (22 moderate, 5 high, 0 critical) remain unresolved as documented in `DEPENDENCIES.md`.
+
 The app remains fail-closed when deployment configuration is absent: source configuration requires the escrow address and deployment block, and transaction readiness also requires a connected wallet on the configured chain and a verified deployment.
 
 ## Not done
@@ -72,6 +75,8 @@ Do not fund the old address `0xE1a98416C5c1fECE3931241B2F6E62F91515bD26`; its ke
 `web/.env.example` now contains the verified testnet address and deployment block. Copy it to `.env.local` for a local testnet frontend; missing configuration still disables writes. No public frontend deployment or mainnet label has been enabled.
 
 ## Dependency limitation
+Emma chose continued testnet hardening rather than mainnet approval. See [dependency risk review](DEPENDENCIES.md) for the remaining dependency paths, compatibility constraints and connector exposure limits. No mainnet credentials or broadcast are authorized.
+
 The authored override in `web/package.json` is `"ws@^8.0.0": "8.21.0"`. It consolidates the nested viem/WalletConnect `ws` 8.x branches onto `8.21.0`, matching direct viem `2.57.7`; WalletConnect's `@walletconnect/jsonrpc` `ws@7.5.13` branch remains unchanged. `npm ls ws` verified the override and the unchanged 7.x branch.
 
 After `npm install --package-lock-only` and `npm ci`, `npm audit --json` reports 27 vulnerabilities (22 moderate, 5 high, 0 critical). Remaining advisories are `GHSA-vcc3-ghjq-m6fr` (`decode-uri-component` denial of service), `GHSA-vfj7-8cjw-p6xm` (`braces` stack-exhaustion denial of service), and `GHSA-w5hq-g745-h8pq` (`uuid` missing buffer bounds check). No `npm audit fix`, force fix, major migration, or unrelated upgrade was used. Review upstream fixes before expanding deployment scope.

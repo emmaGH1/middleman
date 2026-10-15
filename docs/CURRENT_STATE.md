@@ -89,7 +89,7 @@ UUID remediation was attempted but not accepted. With the parent-scoped override
 
 The rejected candidate audit snapshot was 24 vulnerabilities (19 moderate, 5 high, 0 critical), but it still contained vulnerable UUID copies. After rollback, the current `npm audit --json` is **27 vulnerabilities (22 moderate, 5 high, 0 critical)**: `GHSA-vcc3-ghjq-m6fr` (`decode-uri-component` denial of service), `GHSA-vfj7-8cjw-p6xm` (`braces` stack-exhaustion denial of service), and `GHSA-w5hq-g745-h8pq` (`uuid` missing buffer bounds check). `npm run test` after rollback passed 8/8. The ABI check, lint, typecheck and configured build were not rerun in this failure branch; no external security audit was performed.
 
-The public Rabby browser verification at `615186b` predates this dependency-remediation attempt. No browser or chain interaction was performed during this work; the read-only post-change testnet retest remains pending. Remote/mobile MetaMask SDK pairing remains untested and unregistered.
+The public Rabby browser verification at `615186b` predates this dependency-remediation attempt. After restoring the exact dependency graph, a read-only recovery check at `df7cc2d` passed: deal 2 still rendered Sold, gross payouts 2.20/1.05 test USDC and zero reserves; the existing buyer connection and account controls persisted, and the sold state offered no money actions. No new approvals, signatures or chain writes were performed. The original full-flow evidence remains applicable because product code and dependencies were restored unchanged. Remote/mobile MetaMask SDK pairing remains untested and unregistered.
 
 ## Next steps
 Deployment gates are:
